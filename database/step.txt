@@ -1,0 +1,7 @@
+Step membuat database postgres melalui termux:
+- psql postgres
+- CREATE DATABASE cocoa_plant_disease
+- \l (untuk melihat database apa saja yang telah ada di postgres)
+- \c cocoa_plant_disease (masuk ke database cocoa_plant_disease)
+- \dt (melihat table apa saja yang ada di Database cocoa_plant_disease)
+- \d users (melihat informasi kolom dari table users pada Database cocoa_plant_disease)

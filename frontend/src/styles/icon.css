@@ -1,0 +1,44 @@
+/* =========================================================================
+   icon.css  —  ukuran & warna ikon (ikon dari lucide-react)
+
+   Pemakaian di React:
+       <ArrowRight className="icon-sm" />
+       <Sparkles className="icon-sm icon-accent" />
+
+   Ikon lucide digambar dengan warna "currentColor", artinya warnanya
+   mengikuti warna teks (text-...) di sekitarnya.
+   ========================================================================= */
+
+@layer components {
+
+  /* ----- Ukuran ikon ----- */
+
+  .icon-sm {
+    /* h-4 : height 1rem  = 16px
+       w-4 : width  1rem  = 16px */
+    @apply h-4 w-4;
+  }
+
+  .icon-md {
+    /* h-5 / w-5 : 1.25rem = 20px */
+    @apply h-5 w-5;
+  }
+
+  .icon-lg {
+    /* h-6 / w-6 : 1.5rem = 24px */
+    @apply h-6 w-6;
+  }
+
+  .icon-xl {
+    /* h-7 / w-7 : 1.75rem = 28px */
+    @apply h-7 w-7;
+  }
+
+  /* ----- Warna ikon ----- */
+
+  .icon-accent {
+    /* text-lime-300 : warna hijau limau terang (aksen utama CocoaScan).
+       Untuk ikon, "text-" berarti warna garis ikon. */
+    @apply text-lime-300;
+  }
+}

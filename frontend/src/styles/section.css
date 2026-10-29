@@ -1,0 +1,80 @@
+/* =========================================================================
+   section.css  —  pembungkus section dan judul section
+
+   Pemakaian di React:
+       <section id="fitur" className="section section-white section-anchor">
+           <div className="container-wide"> ... </div>
+       </section>
+
+       .section         -> jarak atas-bawah section
+       .section-white / .section-green-soft / .section-green-dark -> warna latar
+       .section-anchor  -> offset scroll agar judul tidak tertutup navbar
+   ========================================================================= */
+
+@layer components {
+
+  /* ----- Pembungkus section ----- */
+
+  .section {
+    /* py-20    : padding atas-bawah 5rem = 80px
+       sm:py-24 : layar >= 640px jadi 6rem = 96px */
+    @apply py-20 sm:py-24;
+  }
+
+  .section-white {
+    /* bg-white : latar putih */
+    @apply bg-white;
+  }
+
+  .section-green-soft {
+    /* bg-green-50 : latar hijau sangat muda */
+    @apply bg-green-50;
+  }
+
+  .section-green-dark {
+    /* bg-green-900 : latar hijau tua */
+    @apply bg-green-900;
+  }
+
+  .section-anchor {
+    /* scroll-mt-16 : saat dituju lewat link #id, berhenti 64px sebelum
+                      tepi atas section, sehingga tidak tertutup navbar sticky (tinggi 64px) */
+    @apply scroll-mt-16;
+  }
+
+  /* ----- Judul section: badge + judul + deskripsi ----- */
+
+  .section-heading-center {
+    /* mx-auto    : berada di tengah
+       max-w-2xl  : lebar maksimum 42rem = 672px
+       text-center: semua teks rata tengah */
+    @apply mx-auto max-w-2xl text-center;
+  }
+
+  .section-title {
+    /* mt-4 : jarak atas 1rem = 16px (dari badge) */
+    @apply mt-4;
+
+    /* text-3xl     : 1,875rem = 30px
+       sm:text-4xl  : layar >= 640px jadi 2,25rem = 36px
+       font-bold    : tebal (700)
+       tracking-tight: jarak antar huruf dirapatkan sedikit
+       text-green-950: hijau paling tua */
+    @apply text-3xl font-bold tracking-tight text-green-950 sm:text-4xl;
+  }
+
+  .section-desc {
+    /* mt-4 : jarak atas 16px */
+    @apply mt-4;
+
+    /* text-sm      : 14px | sm:text-base : layar >= 640px jadi 16px
+       leading-6    : tinggi baris 1,5rem = 24px (nyaman dibaca)
+       text-gray-600: abu-abu sedang */
+    @apply text-sm leading-6 text-gray-600 sm:text-base;
+  }
+
+  .section-desc-left {
+    /* max-w-xl : lebar maksimum 36rem = 576px (untuk judul rata kiri) */
+    @apply max-w-xl;
+  }
+}

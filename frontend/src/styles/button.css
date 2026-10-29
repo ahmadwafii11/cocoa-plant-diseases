@@ -1,0 +1,147 @@
+/* =========================================================================
+   button.css  —  desain TOMBOL
+
+   Pemakaian di React (digabung): "btn" + varian + ukuran
+       <a className="btn btn-primary btn-lg">Mulai Deteksi</a>
+       <a className="btn btn-outline btn-md">Buat Akun</a>
+
+   Susunannya:
+       .btn            -> bentuk dasar semua tombol
+       .btn-primary    -> warna: tombol utama (hijau limau)
+       .btn-outline    -> warna: tombol bergaris tepi, latar transparan
+       .btn-ghost      -> warna: tombol tanpa latar, hanya teks
+       .btn-sm/md/lg   -> ukuran: kecil / sedang / besar
+   ========================================================================= */
+
+@layer components {
+
+  /* ---------------------------------------------------------------------
+     .btn  —  bentuk dasar
+     --------------------------------------------------------------------- */
+  .btn {
+    /* TATA LETAK isi tombol (teks + ikon)
+       inline-flex    : tombol selebar isinya saja, dan isinya disusun
+                        berjajar menyamping (flex)
+       items-center   : teks dan ikon sejajar di tengah secara VERTIKAL
+       justify-center : teks dan ikon di tengah secara HORIZONTAL
+       gap-2          : jarak 0,5rem (8px) antara teks dan ikon */
+    @apply inline-flex items-center justify-center gap-2;
+
+    /* BENTUK
+       rounded-xl : sudut membulat 0,75rem (12px) */
+    @apply rounded-xl;
+
+    /* ANIMASI
+       transition : perubahan warna, bayangan, dan posisi berjalan halus
+                    (bukan langsung berubah) saat di-hover */
+    @apply transition;
+  }
+
+  /* Tombol saat dipilih lewat keyboard (tombol Tab).
+     focus-visible hanya muncul untuk keyboard, tidak untuk klik mouse. */
+  .btn:focus-visible {
+    /* outline-none     : hilangkan garis fokus bawaan browser
+       ring-2           : ganti dengan cincin setebal 2px di sekeliling tombol
+       ring-lime-300    : warna cincinnya hijau limau
+       ring-offset-2    : beri celah 2px antara tombol dan cincin
+       ring-offset-green-900 : warna celah itu hijau tua (sama dengan latar) */
+    @apply outline-none ring-2 ring-lime-300 ring-offset-2 ring-offset-green-900;
+  }
+
+  /* Tombol yang dinonaktifkan (atribut disabled) */
+  .btn:disabled {
+    /* pointer-events-none : tidak bisa diklik
+       opacity-60          : tampak pudar (60% terlihat) */
+    @apply pointer-events-none opacity-60;
+  }
+
+  /* Ikon di dalam tombol (mis. panah) — bergeser ke kanan saat tombol di-hover */
+  .btn-icon {
+    /* transition-transform : hanya perubahan posisi yang dianimasikan */
+    @apply transition-transform;
+  }
+  .btn:hover .btn-icon {
+    /* translate-x-1 : geser 0,25rem (4px) ke kanan */
+    @apply translate-x-1;
+  }
+
+  /* ---------------------------------------------------------------------
+     VARIAN WARNA
+     --------------------------------------------------------------------- */
+
+  /* Tombol utama: hijau limau, teks hijau tua */
+  .btn-primary {
+    /* bg-lime-300     : warna latar hijau limau
+       text-green-950  : warna teks hijau paling tua (kontras dengan latar terang) */
+    @apply bg-lime-300 text-green-950;
+
+    /* shadow-lg         : bayangan besar di bawah tombol
+       shadow-black/10   : warna bayangan hitam dengan 10% kepekatan (tipis) */
+    @apply shadow-lg shadow-black/10;
+
+    /* SAAT DI-HOVER:
+       hover:-translate-y-0.5 : naik sedikit (2px) -> kesan "terangkat"
+       hover:bg-lime-200      : latar jadi lebih terang */
+    @apply hover:-translate-y-0.5 hover:bg-lime-200;
+  }
+
+  /* Tombol outline: transparan dengan garis tepi putih tipis */
+  .btn-outline {
+    /* border         : garis tepi setebal 1px
+       border-white/20: warna garis putih 20% kepekatan (samar)
+       bg-white/5     : latar putih 5% kepekatan (hampir transparan)
+       text-white     : teks putih */
+    @apply border border-white/20 bg-white/5 text-white;
+
+    /* backdrop-blur-sm : mengaburkan (blur 4px) apa pun yang ada di belakang tombol */
+    @apply backdrop-blur-sm;
+
+    /* hover:bg-white/10 : saat di-hover, latar sedikit lebih terang (10%) */
+    @apply hover:bg-white/10;
+  }
+
+  /* Tombol ghost: tanpa latar dan tanpa garis, hanya teks */
+  .btn-ghost {
+    /* text-white : teks putih */
+    @apply text-white;
+
+    /* hover:bg-white/10   : saat di-hover, muncul latar putih tipis
+       hover:text-lime-200 : dan teks berubah jadi hijau limau muda */
+    @apply hover:bg-white/10 hover:text-lime-200;
+  }
+
+  /* ---------------------------------------------------------------------
+     VARIAN UKURAN
+     px = padding kiri-kanan, py = padding atas-bawah (ruang di dalam tombol)
+     --------------------------------------------------------------------- */
+
+  /* Kecil — dipakai di navbar */
+  .btn-sm {
+    /* px-3 : padding kiri-kanan 0,75rem (12px)
+       py-2 : padding atas-bawah 0,5rem  (8px)
+       sm:px-4 : mulai layar >= 640px, padding kiri-kanan jadi 1rem (16px) */
+    @apply px-3 py-2 sm:px-4;
+
+    /* text-sm     : ukuran huruf 0,875rem (14px)
+       font-medium : ketebalan huruf sedang (500) */
+    @apply text-sm font-medium;
+  }
+
+  /* Sedang */
+  .btn-md {
+    /* px-5 : 1,25rem (20px) | py-2.5 : 0,625rem (10px) */
+    @apply px-5 py-2.5;
+
+    /* text-sm : 14px | font-semibold : agak tebal (600) */
+    @apply text-sm font-semibold;
+  }
+
+  /* Besar — dipakai untuk tombol ajakan (CTA) */
+  .btn-lg {
+    /* px-6 : 1,5rem (24px) | py-3.5 : 0,875rem (14px) */
+    @apply px-6 py-3.5;
+
+    /* text-sm : 14px | font-bold : tebal (700) */
+    @apply text-sm font-bold;
+  }
+}

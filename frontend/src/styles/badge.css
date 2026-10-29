@@ -1,0 +1,55 @@
+/* =========================================================================
+   badge.css  —  label kecil berbentuk pil (contoh: "FITUR COCOASCAN")
+
+   Pemakaian di React:
+       <span className="badge badge-dark">Deteksi Penyakit Berbasis AI</span>
+       <span className="badge badge-light">CARA KERJA</span>
+
+       .badge        -> bentuk dasar
+       .badge-dark   -> untuk latar hijau gelap (hero)
+       .badge-light  -> untuk latar putih / hijau muda
+   ========================================================================= */
+
+@layer components {
+
+  .badge {
+    /* inline-flex  : selebar isinya, isi disusun menyamping
+       items-center : isi (ikon + teks) sejajar di tengah vertikal */
+    @apply inline-flex items-center;
+
+    /* rounded-full : sudut dibuat bulat penuh -> bentuk pil/kapsul */
+    @apply rounded-full;
+  }
+
+  /* Versi untuk latar GELAP */
+  .badge-dark {
+    /* gap-2 : jarak 8px antara ikon dan teks */
+    @apply gap-2;
+
+    /* border             : garis tepi 1px
+       border-lime-300/20 : warna garis hijau limau, 20% kepekatan
+       bg-white/10        : latar putih 10% kepekatan (tembus pandang)
+       backdrop-blur-sm   : latar belakang dikaburkan sedikit (efek kaca) */
+    @apply border border-lime-300/20 bg-white/10 backdrop-blur-sm;
+
+    /* px-4 : padding kiri-kanan 16px | py-2 : padding atas-bawah 8px */
+    @apply px-4 py-2;
+
+    /* text-xs        : huruf kecil 0,75rem (12px)
+       font-medium    : ketebalan sedang
+       text-lime-200  : warna teks hijau limau muda */
+    @apply text-xs font-medium text-lime-200;
+  }
+
+  /* Versi untuk latar TERANG */
+  .badge-light {
+    /* bg-green-100 : latar hijau sangat muda */
+    @apply bg-green-100;
+
+    /* px-3 : padding kiri-kanan 12px | py-1 : padding atas-bawah 4px */
+    @apply px-3 py-1;
+
+    /* text-xs : 12px | font-semibold : agak tebal | text-green-700 : teks hijau sedang */
+    @apply text-xs font-semibold text-green-700;
+  }
+}

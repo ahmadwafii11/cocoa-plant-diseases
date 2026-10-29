@@ -1,0 +1,213 @@
+/* =========================================================================
+   layout.css  —  kerangka halaman, container, navbar, logo, footer
+   ========================================================================= */
+
+@layer components {
+
+  /* =====================================================================
+     KERANGKA HALAMAN
+     Susunan: <div class="page"> navbar + <main class="page-main"> + footer </div>
+     ===================================================================== */
+
+  .page {
+    /* flex flex-col : anak-anaknya (navbar, main, footer) disusun
+                       dari ATAS ke BAWAH
+       min-h-screen  : tinggi minimal = tinggi layar penuh, supaya footer
+                       tetap di bawah walau isi halaman sedikit */
+    @apply flex min-h-screen flex-col;
+
+    /* LATAR GRADASI
+       bg-gradient-to-br : gradasi mengarah ke kanan-bawah (to Bottom-Right)
+       from-green-950    : warna di titik awal (kiri-atas), hijau paling tua
+       via-green-900     : warna di tengah
+       to-green-800      : warna di titik akhir (kanan-bawah), hijau lebih terang
+       (Tailwind v4 juga menyediakan nama baru: bg-linear-to-br) */
+    @apply bg-gradient-to-br from-green-950 via-green-900 to-green-800;
+  }
+
+  .page-main {
+    /* flex-1 : isi <main> mengambil semua sisa ruang di antara navbar & footer */
+    @apply flex-1;
+  }
+
+  /* =====================================================================
+     CONTAINER  —  pembungkus konten agar tidak melebar sampai tepi layar
+     ===================================================================== */
+
+  .container-wide {
+    /* mx-auto  : margin kiri-kanan "auto" -> kotak berada di TENGAH halaman
+       max-w-7xl: lebar maksimum 80rem = 1280px */
+    @apply mx-auto max-w-7xl;
+
+    /* Padding kiri-kanan supaya isi tidak menempel ke tepi layar.
+       Aturannya "mobile-first": angka tanpa prefix untuk semua layar,
+       lalu ditimpa prefix sm: dan lg: saat layar makin besar.
+       px-4    : 16px (semua layar)
+       sm:px-6 : 24px (layar >= 640px)
+       lg:px-8 : 32px (layar >= 1024px) */
+    @apply px-4 sm:px-6 lg:px-8;
+  }
+
+  .container-narrow {
+    /* sama seperti di atas, tapi lebih sempit: max-w-4xl = 56rem = 896px */
+    @apply mx-auto max-w-4xl;
+    @apply px-4 sm:px-6 lg:px-8;
+  }
+
+  /* =====================================================================
+     NAVBAR  —  bar atas
+     ===================================================================== */
+
+  .navbar {
+    /* sticky top-0 : menempel di tepi atas layar saat halaman di-scroll
+       z-50         : ditumpuk di atas elemen lain (z-index 50) */
+    @apply sticky top-0 z-50;
+
+    /* border-b       : garis tepi hanya di sisi bawah (1px)
+       border-white/10: warna garis putih 10% kepekatan (samar) */
+    @apply border-b border-white/10;
+
+    /* bg-green-900/80  : latar hijau tua dengan 80% kepekatan (sedikit tembus)
+       backdrop-blur-xl : konten di belakang navbar dikaburkan (blur 24px)
+                          -> efek kaca buram saat scroll */
+    @apply bg-green-900/80 backdrop-blur-xl;
+  }
+
+  .navbar-inner {
+    /* (dipakai bersama .container-wide)
+       flex            : logo, menu, tombol disusun menyamping
+       h-16            : tinggi navbar 4rem = 64px
+       items-center    : semua isi sejajar di tengah vertikal
+       justify-between : isi disebar: logo di kiri, tombol di kanan
+       gap-4           : jarak minimal antar bagian 16px */
+    @apply flex h-16 items-center justify-between gap-4;
+  }
+
+  .navbar-links {
+    /* hidden   : disembunyikan di layar kecil (HP)
+       md:flex  : mulai layar >= 768px tampil, disusun menyamping
+       items-center : sejajar di tengah vertikal
+       gap-1    : jarak antar link 4px */
+    @apply hidden items-center gap-1 md:flex;
+  }
+
+  .navbar-link {
+    /* rounded-xl : sudut membulat 12px (terlihat saat hover)
+       px-4 py-2  : padding kiri-kanan 16px, atas-bawah 8px */
+    @apply rounded-xl px-4 py-2;
+
+    /* text-sm : 14px | font-medium : ketebalan sedang | text-green-100 : hijau sangat muda */
+    @apply text-sm font-medium text-green-100;
+
+    /* transition         : perubahan warna berjalan halus
+       hover:bg-white/10  : saat di-hover, muncul latar putih tipis
+       hover:text-lime-200: dan teks jadi hijau limau muda */
+    @apply transition hover:bg-white/10 hover:text-lime-200;
+  }
+
+  .navbar-actions {
+    /* flex items-center : tombol Login & Daftar menyamping, sejajar tengah
+       gap-2             : jarak antar tombol 8px
+       sm:gap-3          : layar >= 640px jaraknya 12px */
+    @apply flex items-center gap-2 sm:gap-3;
+  }
+
+  /* =====================================================================
+     LOGO  —  ikon + nama aplikasi + tagline
+     Versi kecil (footer): tambahkan class .logo-sm
+     ===================================================================== */
+
+  .logo {
+    /* flex items-center : kotak ikon dan teks menyamping, sejajar tengah
+       gap-3             : jarak 12px */
+    @apply flex items-center gap-3;
+  }
+
+  .logo-icon-box {
+    /* KOTAK pembungkus ikon
+       flex items-center justify-center : ikon di tengah kotak
+       shrink-0       : kotak tidak boleh mengecil walau ruang sempit
+       overflow-hidden: bagian gambar yang keluar kotak dipotong */
+    @apply flex shrink-0 items-center justify-center overflow-hidden;
+
+    /* h-10 w-10 : tinggi & lebar 2,5rem = 40px
+       rounded-xl: sudut membulat 12px
+       bg-white/15: latar putih 15% kepekatan
+       p-2       : padding semua sisi 8px (jarak ikon ke tepi kotak) */
+    @apply h-10 w-10 rounded-xl bg-white/15 p-2;
+  }
+
+  .logo-icon {
+    /* h-full w-full  : gambar memenuhi kotak pembungkusnya
+       object-contain : gambar diperkecil agar muat utuh tanpa terpotong/terdistorsi */
+    @apply h-full w-full object-contain;
+  }
+
+  .logo-text {
+    /* block : pembungkus nama + tagline tampil sebagai satu blok */
+    @apply block;
+  }
+
+  .logo-name {
+    /* block         : tampil sebagai baris sendiri (nama di atas, tagline di bawah)
+       text-base     : 16px | sm:text-lg : layar >= 640px jadi 18px
+       font-bold     : tebal (700)
+       leading-tight : jarak antar baris rapat (1,25x)
+       text-white    : putih */
+    @apply block text-base font-bold leading-tight text-white sm:text-lg;
+  }
+
+  .logo-tagline {
+    /* block         : baris sendiri
+       text-[10px]   : ukuran huruf PERSIS 10px (kurung siku = nilai bebas)
+       leading-tight : baris rapat
+       text-green-200: hijau muda */
+    @apply block text-[10px] leading-tight text-green-200;
+  }
+
+  /* ----- Varian kecil (.logo-sm), dipakai di footer ----- */
+
+  .logo-sm .logo-icon-box {
+    /* h-9 w-9 : 36px | rounded-lg : sudut 8px | bg-white/10 : latar lebih tipis | p-1.5 : padding 6px */
+    @apply h-9 w-9 rounded-lg bg-white/10 p-1.5;
+  }
+
+  .logo-sm .logo-name {
+    /* text-sm : 14px (tanpa membesar di layar lebar) */
+    @apply text-sm;
+  }
+
+  .logo-sm .logo-tagline {
+    /* text-xs : 12px | text-green-300 : hijau sedikit lebih terang dari 200 */
+    @apply text-xs text-green-300;
+  }
+
+  /* =====================================================================
+     FOOTER
+     ===================================================================== */
+
+  .footer {
+    /* border-t        : garis tepi di sisi ATAS (1px)
+       border-white/10 : putih 10% kepekatan
+       bg-green-950    : latar hijau paling tua */
+    @apply border-t border-white/10 bg-green-950;
+  }
+
+  .footer-inner {
+    /* (dipakai bersama .container-wide)
+       flex flex-col : di HP, logo dan copyright disusun ATAS-BAWAH
+       gap-4         : jarak 16px
+       py-8          : padding atas-bawah 2rem = 32px */
+    @apply flex flex-col gap-4 py-8;
+
+    /* md:flex-row         : layar >= 768px disusun MENYAMPING
+       md:items-center     : sejajar di tengah vertikal
+       md:justify-between  : logo di kiri, copyright di kanan */
+    @apply md:flex-row md:items-center md:justify-between;
+  }
+
+  .footer-copy {
+    /* text-xs : 12px | text-green-300 : hijau muda */
+    @apply text-xs text-green-300;
+  }
+}

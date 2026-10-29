@@ -1,0 +1,19 @@
+/* =========================================================================
+   components.css  —  PINTU MASUK semua style komponen
+
+   Cara memakai: di src/index.css, tepat SETELAH baris
+       @import "tailwindcss";
+   tambahkan satu baris ini:
+       @import "./styles/components.css";
+
+   Tiap file di bawah berisi class bernama (misalnya .btn-primary).
+   Di dalamnya, desainnya disusun dari class Tailwind memakai @apply,
+   lengkap dengan penjelasan arti tiap class Tailwind.
+   ========================================================================= */
+
+@import "./layout.css";    /* kerangka halaman, container, navbar, logo, footer */
+@import "./button.css";    /* tombol: .btn, .btn-primary, .btn-outline, ...      */
+@import "./badge.css";     /* label kecil berbentuk pil: .badge                  */
+@import "./icon.css";      /* ukuran & warna ikon: .icon-sm, .icon-accent, ...   */
+@import "./section.css";   /* section & judul section                            */
+@import "./landing.css";   /* bagian khusus halaman Landing                      */

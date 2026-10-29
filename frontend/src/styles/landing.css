@@ -1,0 +1,437 @@
+/* =========================================================================
+   landing.css  —  style khusus halaman Landing
+
+   Isi file ini berurutan sesuai tampilan halaman:
+       1. HERO            (bagian paling atas, judul besar)
+       2. PREVIEW CARD    (kartu di sisi kanan hero)
+       3. FEATURES        (3 kartu fitur)
+       4. HOW IT WORKS    (3 langkah)
+       5. CTA             (ajakan mendaftar)
+   ========================================================================= */
+
+@layer components {
+
+  /* =====================================================================
+     1. HERO
+     ===================================================================== */
+
+  .hero {
+    /* relative       : jadi patokan posisi untuk lingkaran dekorasi (absolute)
+       overflow-hidden: lingkaran yang keluar dari section dipotong,
+                        sehingga tidak muncul scrollbar horizontal */
+    @apply relative overflow-hidden;
+  }
+
+  /* Dua lingkaran cahaya buram sebagai hiasan latar */
+  .hero-blob-left {
+    /* pointer-events-none : tidak menghalangi klik di bawahnya
+       absolute            : diletakkan bebas, tidak mendorong elemen lain
+       -left-32            : geser 8rem (128px) KELUAR dari tepi kiri
+       top-20              : 5rem (80px) dari atas */
+    @apply pointer-events-none absolute -left-32 top-20;
+
+    /* h-72 w-72   : 18rem = 288px (persegi)
+       rounded-full: jadi lingkaran
+       bg-lime-300/10 : hijau limau 10% kepekatan
+       blur-3xl    : dikaburkan 64px -> tampak seperti cahaya, bukan lingkaran tegas */
+    @apply h-72 w-72 rounded-full bg-lime-300/10 blur-3xl;
+  }
+
+  .hero-blob-right {
+    /* -right-32 : geser 128px keluar dari tepi kanan | top-10 : 40px dari atas */
+    @apply pointer-events-none absolute -right-32 top-10;
+
+    /* h-96 w-96 : 24rem = 384px | bg-green-400/10 : hijau terang 10% */
+    @apply h-96 w-96 rounded-full bg-green-400/10 blur-3xl;
+  }
+
+  .hero-inner {
+    /* (dipakai bersama .container-wide)
+       relative : membuat konten tampil DI ATAS lingkaran dekorasi
+                  (elemen "positioned" yang muncul belakangan menumpuk di atas) */
+    @apply relative;
+
+    /* Jarak atas (pt) & bawah (pb) hero, makin besar di layar besar:
+       pt-16 / pb-20       : 64px / 80px  (HP)
+       sm:pt-20 / sm:pb-24 : 80px / 96px  (>= 640px)
+       lg:pt-24 / lg:pb-28 : 96px / 112px (>= 1024px) */
+    @apply pb-20 pt-16 sm:pb-24 sm:pt-20 lg:pb-28 lg:pt-24;
+  }
+
+  .hero-grid {
+    /* grid           : susun anak dalam kolom/baris (grid)
+       items-center   : kedua kolom sejajar di tengah vertikal
+       gap-12         : jarak antar kolom 3rem = 48px */
+    @apply grid items-center gap-12;
+
+    /* lg:grid-cols-2 : layar >= 1024px dibagi 2 kolom sama lebar
+                        (di bawah itu, 1 kolom: teks di atas, kartu di bawah)
+       lg:gap-16      : di layar besar jarak jadi 4rem = 64px */
+    @apply lg:grid-cols-2 lg:gap-16;
+  }
+
+  .hero-content {
+    /* text-center      : rata tengah di HP
+       lg:text-left     : rata kiri di layar >= 1024px */
+    @apply text-center lg:text-left;
+  }
+
+  .hero-badge {
+    /* mb-6 : margin bawah 1,5rem = 24px (jarak badge ke judul) */
+    @apply mb-6;
+  }
+
+  .hero-title {
+    /* text-4xl : 36px  |  sm:text-5xl : 48px (>= 640px)  |  lg:text-6xl : 60px (>= 1024px) */
+    @apply text-4xl sm:text-5xl lg:text-6xl;
+
+    /* font-extrabold : sangat tebal (800)
+       leading-tight  : jarak antar baris rapat (1,25x)
+       tracking-tight : jarak antar huruf dirapatkan sedikit
+       text-white     : putih */
+    @apply font-extrabold leading-tight tracking-tight text-white;
+  }
+
+  .hero-title-accent {
+    /* block         : dipaksa tampil di baris sendiri
+       text-lime-300 : warna hijau limau (aksen) agar "Buah Kakao" menonjol */
+    @apply block text-lime-300;
+  }
+
+  .hero-desc {
+    /* mx-auto : di HP paragraf berada di tengah
+       lg:mx-0 : di layar besar tidak di tengah lagi (rata kiri)
+       max-w-xl: lebar maksimum 36rem = 576px agar baris tidak terlalu panjang
+       mt-6    : margin atas 24px */
+    @apply mx-auto mt-6 max-w-xl lg:mx-0;
+
+    /* text-base : 16px | sm:text-lg : 18px (>= 640px)
+       leading-7 : tinggi baris 1,75rem = 28px
+       text-green-100 : hijau sangat muda */
+    @apply text-base leading-7 text-green-100 sm:text-lg;
+  }
+
+  .hero-actions {
+    /* mt-8 : margin atas 32px
+       flex : tombol disusun berurutan
+       flex-col : di HP tombol disusun ATAS-BAWAH
+       sm:flex-row : layar >= 640px tombol berjajar MENYAMPING
+       gap-3 : jarak antar tombol 12px */
+    @apply mt-8 flex flex-col gap-3 sm:flex-row;
+
+    /* justify-center     : tombol di tengah (HP)
+       lg:justify-start   : tombol rata kiri (layar >= 1024px) */
+    @apply justify-center lg:justify-start;
+  }
+
+  .hero-trust {
+    /* mt-8 : margin atas 32px
+       flex flex-wrap : item berjajar menyamping dan turun ke baris baru bila tidak muat */
+    @apply mt-8 flex flex-wrap;
+
+    /* justify-center / lg:justify-start : tengah di HP, kiri di layar besar
+       gap-x-5 : jarak horizontal antar item 20px
+       gap-y-2 : jarak vertikal antar baris 8px */
+    @apply justify-center gap-x-5 gap-y-2 lg:justify-start;
+
+    /* text-xs : 12px | text-green-200 : hijau muda */
+    @apply text-xs text-green-200;
+  }
+
+  .hero-trust-item {
+    /* flex items-center : ikon centang dan teks sejajar
+       gap-1.5 : jarak 6px */
+    @apply flex items-center gap-1.5;
+  }
+
+  .hero-visual {
+    /* relative : patokan posisi
+       mx-auto  : berada di tengah kolom
+       w-full   : lebar penuh kolom
+       max-w-lg : tapi tidak lebih dari 32rem = 512px */
+    @apply relative mx-auto w-full max-w-lg;
+  }
+
+  /* =====================================================================
+     2. PREVIEW CARD  —  kartu "COCOASCAN AI" di sisi kanan hero
+     ===================================================================== */
+
+  .preview-card {
+    /* relative overflow-hidden : isi yang keluar dari sudut kartu dipotong */
+    @apply relative overflow-hidden;
+
+    /* rounded-3xl : sudut sangat membulat 1,5rem = 24px
+       border border-white/10 : garis tepi 1px putih 10%
+       bg-white/10 : latar putih 10% kepekatan (efek kaca)
+       shadow-2xl : bayangan paling besar
+       backdrop-blur-xl : latar belakang kartu dikaburkan 24px */
+    @apply rounded-3xl border border-white/10 bg-white/10 shadow-2xl backdrop-blur-xl;
+
+    /* p-5 : padding 1,25rem = 20px | sm:p-7 : 1,75rem = 28px (>= 640px) */
+    @apply p-5 sm:p-7;
+  }
+
+  .preview-header {
+    /* mb-5 : margin bawah 20px
+       flex items-center justify-between : teks di kiri, ikon di kanan, sejajar tengah */
+    @apply mb-5 flex items-center justify-between;
+  }
+
+  .preview-eyebrow {
+    /* text-xs : 12px | font-medium | text-green-200 */
+    @apply text-xs font-medium text-green-200;
+  }
+
+  .preview-title {
+    /* mt-1 : margin atas 4px | text-lg : 18px | font-bold : tebal | text-white */
+    @apply mt-1 text-lg font-bold text-white;
+  }
+
+  .preview-header-icon {
+    /* KOTAK kecil berisi ikon di pojok kanan atas kartu
+       flex items-center justify-center : ikon di tengah kotak
+       h-10 w-10 : 40px | rounded-xl : sudut 12px
+       bg-lime-300/15 : latar hijau limau 15% kepekatan */
+    @apply flex h-10 w-10 items-center justify-center rounded-xl bg-lime-300/15;
+  }
+
+  .preview-visual {
+    /* AREA gambar persegi di tengah kartu
+       relative flex items-center justify-center : isi di tengah
+       aspect-square : tinggi = lebar (rasio 1:1)
+       overflow-hidden : potong isi yang keluar */
+    @apply relative flex aspect-square items-center justify-center overflow-hidden;
+
+    /* rounded-2xl : sudut 16px | border border-white/10 : garis tepi samar */
+    @apply rounded-2xl border border-white/10;
+
+    /* bg-gradient-to-br from-green-800 to-green-950 :
+       gradasi kanan-bawah dari hijau sedang ke hijau paling tua */
+    @apply bg-gradient-to-br from-green-800 to-green-950;
+  }
+
+  .preview-glow-wrap {
+    /* absolute inset-0 : menutupi seluruh area gambar (atas, bawah, kiri, kanan = 0)
+       opacity-20 : hanya 20% terlihat -> cahaya lembut */
+    @apply absolute inset-0 opacity-20;
+  }
+
+  .preview-glow-1 {
+    /* absolute left-1/4 top-1/4 : diletakkan 25% dari kiri dan 25% dari atas
+       h-32 w-32 : 128px | rounded-full : lingkaran
+       bg-lime-300 : hijau limau | blur-3xl : kabur 64px */
+    @apply absolute left-1/4 top-1/4 h-32 w-32 rounded-full bg-lime-300 blur-3xl;
+  }
+
+  .preview-glow-2 {
+    /* bottom-1/4 right-1/4 : 25% dari bawah dan 25% dari kanan
+       h-40 w-40 : 160px | bg-green-400 : hijau terang */
+    @apply absolute bottom-1/4 right-1/4 h-40 w-40 rounded-full bg-green-400 blur-3xl;
+  }
+
+  .preview-center {
+    /* relative : tampil di atas cahaya latar
+       flex flex-col items-center : foto dan teks disusun atas-bawah, rata tengah
+       text-center : teks rata tengah */
+    @apply relative flex flex-col items-center text-center;
+  }
+
+  .preview-photo {
+    /* mb-5 : margin bawah 20px
+       h-28 w-28 : 112px (HP) | sm:h-36 sm:w-36 : 144px (>= 640px)
+       overflow-hidden : foto dipotong mengikuti bentuk lingkaran
+       rounded-full : lingkaran penuh */
+    @apply mb-5 h-28 w-28 overflow-hidden rounded-full sm:h-36 sm:w-36;
+
+    /* border-2 border-lime-300/30 : garis tepi 2px hijau limau 30%
+       bg-lime-300/10 : latar tipis di belakang foto
+       shadow-lg shadow-black/20 : bayangan besar hitam 20% */
+    @apply border-2 border-lime-300/30 bg-lime-300/10 shadow-lg shadow-black/20;
+  }
+
+  .preview-photo-img {
+    /* h-full w-full : foto memenuhi lingkaran
+       object-cover  : foto diperbesar/dipotong agar menutupi penuh tanpa gepeng */
+    @apply h-full w-full object-cover;
+  }
+
+  .preview-caption {
+    /* text-sm : 14px | font-semibold : agak tebal | text-white */
+    @apply text-sm font-semibold text-white;
+  }
+
+  .preview-caption-sub {
+    /* mt-1 : margin atas 4px | text-xs : 12px | text-green-200 */
+    @apply mt-1 text-xs text-green-200;
+  }
+
+  .preview-stats {
+    /* mt-5 : margin atas 20px
+       grid grid-cols-2 : dua kotak sama lebar berjajar
+       gap-3 : jarak 12px */
+    @apply mt-5 grid grid-cols-2 gap-3;
+  }
+
+  .stat-tile {
+    /* rounded-xl : sudut 12px | border border-white/10 : garis tepi samar
+       bg-black/10 : latar hitam 10% (sedikit lebih gelap dari kartu)
+       p-3 : padding 12px */
+    @apply rounded-xl border border-white/10 bg-black/10 p-3;
+  }
+
+  .stat-tile-header {
+    /* mb-2 : margin bawah 8px
+       flex items-center gap-2 : ikon dan label sejajar, jarak 8px */
+    @apply mb-2 flex items-center gap-2;
+  }
+
+  .stat-tile-label {
+    /* text-[11px] : ukuran PERSIS 11px | text-green-200 */
+    @apply text-[11px] text-green-200;
+  }
+
+  .stat-tile-value {
+    /* text-sm : 14px | font-bold : tebal | text-white */
+    @apply text-sm font-bold text-white;
+  }
+
+  /* =====================================================================
+     3. FEATURES  —  3 kartu fitur
+     ===================================================================== */
+
+  .feature-grid {
+    /* mt-12 : margin atas 3rem = 48px
+       grid : susun dalam grid | gap-6 : jarak antar kartu 24px
+       md:grid-cols-3 : layar >= 768px jadi 3 kolom (di HP 1 kolom, ditumpuk) */
+    @apply mt-12 grid gap-6 md:grid-cols-3;
+  }
+
+  .feature-card {
+    /* rounded-2xl : sudut 16px
+       border border-gray-100 : garis tepi abu-abu sangat muda
+       bg-gray-50 : latar abu-abu hampir putih
+       p-6 : padding 24px */
+    @apply rounded-2xl border border-gray-100 bg-gray-50 p-6;
+
+    /* transition : perubahan berjalan halus
+       duration-300 : lama animasi 300 milidetik */
+    @apply transition duration-300;
+
+    /* SAAT DI-HOVER:
+       hover:-translate-y-1 : kartu naik 4px
+       hover:border-green-100 : garis tepi jadi hijau muda
+       hover:bg-green-50 : latar jadi hijau sangat muda
+       hover:shadow-lg : muncul bayangan besar */
+    @apply hover:-translate-y-1 hover:border-green-100 hover:bg-green-50 hover:shadow-lg;
+  }
+
+  .feature-card-icon {
+    /* flex items-center justify-center : ikon di tengah kotak
+       h-12 w-12 : 48px | rounded-xl : sudut 12px */
+    @apply flex h-12 w-12 items-center justify-center rounded-xl;
+
+    /* bg-green-700 : latar hijau sedang | text-white : ikon putih
+       shadow-sm : bayangan kecil | transition : perubahan warna halus */
+    @apply bg-green-700 text-white shadow-sm transition;
+  }
+
+  /* Saat KARTU di-hover, kotak ikonnya ikut menggelap */
+  .feature-card:hover .feature-card-icon {
+    /* bg-green-800 : hijau sedikit lebih tua */
+    @apply bg-green-800;
+  }
+
+  .feature-card-title {
+    /* mt-5 : margin atas 20px | text-lg : 18px | font-bold | text-gray-900 : abu-abu hampir hitam */
+    @apply mt-5 text-lg font-bold text-gray-900;
+  }
+
+  .feature-card-desc {
+    /* mt-2 : margin atas 8px | text-sm : 14px | leading-6 : tinggi baris 24px | text-gray-600 */
+    @apply mt-2 text-sm leading-6 text-gray-600;
+  }
+
+  /* =====================================================================
+     4. HOW IT WORKS  —  judul di kiri, 3 langkah di kanan
+     ===================================================================== */
+
+  .how-grid {
+    /* grid items-center : dua kolom sejajar tengah vertikal
+       gap-12 : jarak 48px
+       lg:grid-cols-2 : layar >= 1024px dibagi 2 kolom (HP: ditumpuk) */
+    @apply grid items-center gap-12 lg:grid-cols-2;
+  }
+
+  .steps {
+    /* space-y-4 : beri jarak vertikal 16px di antara anak-anaknya (kartu langkah) */
+    @apply space-y-4;
+  }
+
+  .step {
+    /* flex gap-4 : nomor di kiri, teks di kanan, jarak 16px */
+    @apply flex gap-4;
+
+    /* rounded-2xl : sudut 16px | border border-green-100 : garis tepi hijau muda
+       bg-white : latar putih | p-5 : padding 20px | shadow-sm : bayangan kecil */
+    @apply rounded-2xl border border-green-100 bg-white p-5 shadow-sm;
+  }
+
+  .step-number {
+    /* flex items-center justify-center : angka di tengah kotak
+       shrink-0 : kotak tidak boleh mengecil saat teks panjang
+       h-10 w-10 : 40px | rounded-xl : sudut 12px */
+    @apply flex h-10 w-10 shrink-0 items-center justify-center rounded-xl;
+
+    /* bg-green-700 : latar hijau | text-sm : 14px | font-bold | text-white */
+    @apply bg-green-700 text-sm font-bold text-white;
+  }
+
+  .step-title {
+    /* font-bold : tebal | text-gray-900 : abu-abu hampir hitam */
+    @apply font-bold text-gray-900;
+  }
+
+  .step-desc {
+    /* mt-1 : margin atas 4px | text-sm : 14px | leading-5 : tinggi baris 20px | text-gray-600 */
+    @apply mt-1 text-sm leading-5 text-gray-600;
+  }
+
+  /* =====================================================================
+     5. CTA  —  ajakan mendaftar
+     ===================================================================== */
+
+  .cta-inner {
+    /* text-center : semua isi rata tengah (dipakai bersama .container-narrow) */
+    @apply text-center;
+  }
+
+  .cta-icon-box {
+    /* mx-auto : kotak di tengah
+       flex items-center justify-center : ikon di tengah kotak
+       h-14 w-14 : 56px | rounded-2xl : sudut 16px
+       bg-lime-300/15 : latar hijau limau 15% */
+    @apply mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-lime-300/15;
+  }
+
+  .cta-title {
+    /* mt-6 : margin atas 24px
+       text-3xl : 30px | sm:text-4xl : 36px (>= 640px)
+       font-bold | text-white */
+    @apply mt-6 text-3xl font-bold text-white sm:text-4xl;
+  }
+
+  .cta-desc {
+    /* mx-auto : di tengah | mt-4 : margin atas 16px | max-w-2xl : lebar maks 672px */
+    @apply mx-auto mt-4 max-w-2xl;
+
+    /* text-sm : 14px | sm:text-base : 16px | leading-6 : tinggi baris 24px | text-green-100 */
+    @apply text-sm leading-6 text-green-100 sm:text-base;
+  }
+
+  .cta-actions {
+    /* mt-8 : margin atas 32px
+       flex flex-col sm:flex-row : tombol atas-bawah di HP, menyamping di >= 640px
+       justify-center : tombol di tengah | gap-3 : jarak 12px */
+    @apply mt-8 flex flex-col justify-center gap-3 sm:flex-row;
+  }
+}

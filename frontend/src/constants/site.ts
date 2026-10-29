@@ -8,3 +8,8 @@ export const APP_TAGLINE = "Smart Cocoa Disease Detection";
 
 export const MODEL_NAME = "ResNet50-CBAM";
 export const CLASS_COUNT = 4;
+
+export interface NavItem {
+    label: string;
+    href: string;
+}

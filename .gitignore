@@ -1,0 +1,83 @@
+# ==============================================================================
+# 1. GENERAL / SYSTEM FILES
+# ==============================================================================
+.DS_Store
+Thumbs.db
+*.log
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+.idea/
+.vscode/
+*.local
+
+# ==============================================================================
+# 2. FRONTEND (React TypeScript / Vite / Node.js)
+# ==============================================================================
+# Dependencies
+**/node_modules/
+**/pnpm-lock.yaml
+**/package-lock.json
+**/yarn.lock
+
+# Production builds
+**/dist/
+**/build/
+
+# Vite & TS Cache
+**/.vite/
+**/.eslintcache
+*.tsbuildinfo
+
+# Local Environment
+frontend/.env
+frontend/.env.local
+frontend/.env.*.local
+
+# ==============================================================================
+# 3. BACKEND (Rust / Cargo)
+# ==============================================================================
+# Compiled output / Build artifacts
+**/target/
+
+# Cargo backup files
+**/*.rs.bk
+**/Cargo.lock
+
+# Rust local development tools
+**/.cargo/config.toml
+
+# Local Environment
+backend/.env
+
+# ==============================================================================
+# 4. ML-SERVICE (Python / FastAPI)
+# ==============================================================================
+# Byte-compiled / optimized / DLL files
+**/__pycache__/
+**/*.py[cod]
+**/*$py.class
+
+# Python Virtual Environments
+**/.venv/
+**/venv/
+**/ENV/
+**/env/
+
+# Jupyter Notebook checkpoints
+**/.ipynb_checkpoints/
+
+# Machine Learning Large Files (Model & Datasets)
+# Disarankan tidak mengupload file model (.h5, .pth, .onnx, dll) ke GitHub karena terlalu besar
+ml-service/models/*.h5
+ml-service/models/*.keras
+ml-service/models/*.pth
+ml-service/models/*.onnx
+ml-service/models/*.pkl
+**/datasets/
+**/.models_cache/
+
+# Local Environment
+ml-service/.env

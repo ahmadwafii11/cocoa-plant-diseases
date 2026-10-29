@@ -27,8 +27,8 @@
   }
 
   .section-green-soft {
-    /* bg-green-50 : latar hijau sangat muda */
-    @apply bg-green-50;
+    /* bg-green-100 : latar hijau sangat muda */
+    @apply bg-green-100;
   }
 
   .section-green-dark {

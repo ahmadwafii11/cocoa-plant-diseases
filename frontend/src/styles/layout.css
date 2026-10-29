@@ -83,6 +83,13 @@
     @apply flex h-16 items-center justify-between gap-4;
   }
 
+  .navbar-left {
+    /* flex items-center : logo dan menu berdampingan, sejajar tengah vertikal
+       gap-4             : jarak logo ke menu 16px
+       lg:gap-8          : layar >= 1024px jaraknya 32px */
+    @apply flex items-center gap-4 lg:gap-8;
+  }
+
   .navbar-links {
     /* hidden   : disembunyikan di layar kecil (HP)
        md:flex  : mulai layar >= 768px tampil, disusun menyamping
@@ -206,8 +213,27 @@
     @apply md:flex-row md:items-center md:justify-between;
   }
 
+  .footer-meta {
+    /* flex items-center : teks copyright dan ikon GitHub berdampingan, sejajar tengah
+       gap-3             : jarak teks ke ikon 12px */
+    @apply flex items-center gap-3;
+  }
+
   .footer-copy {
     /* text-xs : 12px | text-green-300 : hijau muda */
     @apply text-xs text-green-300;
+  }
+
+  .footer-github {
+    /* text-zinc-400 : warna ikon abu-abu (ikon mengikuti warna teks)
+       transition-colors : perubahan warna berjalan halus
+       hover:text-white  : saat di-hover, ikon jadi putih */
+    @apply text-zinc-400 transition-colors hover:text-white;
+  }
+
+  .footer-github-icon {
+    /* h-5 w-5 : ukuran ikon 1,25rem = 20px
+       fill-current : isi ikon mengikuti warna teks di atas */
+    @apply h-5 w-5 fill-current;
   }
 }

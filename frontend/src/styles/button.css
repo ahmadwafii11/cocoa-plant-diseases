@@ -65,6 +65,12 @@
     @apply translate-x-1;
   }
 
+  /* Tombol selebar penuh (mis. tombol submit di form) */
+  .btn-block {
+    /* w-full : lebar 100% dari wadahnya */
+    @apply w-full;
+  }
+
   /* ---------------------------------------------------------------------
      VARIAN WARNA
      --------------------------------------------------------------------- */

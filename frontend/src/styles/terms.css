@@ -41,8 +41,8 @@
     /* mt-6 : margin atas 24px
        rounded-xl : sudut 12px | border border-green-100 : garis tepi hijau muda
        bg-green-50 : latar hijau sangat muda | p-4 : padding 16px
-       text-sm : 14px | leading-6 : tinggi baris 24px | text-green-900 : teks hijau tua */
-    @apply mt-6 rounded-xl border border-green-100 bg-green-50 p-4 text-sm leading-6 text-green-900;
+       text-sm : 14px | leading-6 : tinggi baris 24px | text-green-900 : teks hijau tua | text-justify : text rata kanan */
+    @apply mt-6 rounded-xl border border-green-100 bg-green-50 p-4 text-sm leading-6 text-green-900 text-justify;
   }
 
   .terms-section {
@@ -58,8 +58,8 @@
   }
 
   .terms-text {
-    /* mt-3 : margin atas 12px | text-sm : 14px | leading-7 : tinggi baris 28px | text-gray-700 */
-    @apply mt-3 text-sm leading-7 text-gray-700;
+    /* mt-3 : margin atas 12px | text-sm : 14px | leading-7 : tinggi baris 28px | text-gray-700 | text-justify : text rata kanan */
+    @apply mt-3 text-sm leading-7 text-gray-700 text-justify;
   }
 
   .terms-list {

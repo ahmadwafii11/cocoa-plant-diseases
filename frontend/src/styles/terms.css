@@ -1,0 +1,111 @@
+/* =========================================================================
+   terms.css  —  halaman Syarat dan Ketentuan + checkbox persetujuan
+
+   Isi berurutan:
+       1. HALAMAN   (pages/TermsConditions.tsx)
+       2. CHECKBOX  (components/auth/TermsCheckbox.tsx)
+   ========================================================================= */
+
+@layer components {
+
+  /* =====================================================================
+     1. HALAMAN
+     ===================================================================== */
+
+  .terms-wrap {
+    /* py-10 : padding atas-bawah 2,5rem = 40px
+       sm:py-14 : layar >= 640px jadi 3,5rem = 56px */
+    @apply py-10 sm:py-14;
+  }
+
+  .terms-card {
+    /* KARTU putih tempat teks dibaca
+       rounded-2xl : sudut membulat 16px
+       bg-white    : latar putih (teks panjang lebih nyaman dibaca di latar terang)
+       shadow-xl   : bayangan besar
+       p-6         : padding 24px | sm:p-10 : 40px (>= 640px) */
+    @apply rounded-2xl bg-white shadow-xl p-6 sm:p-10;
+  }
+
+  .terms-title {
+    /* text-3xl : 30px | sm:text-4xl : 36px | font-bold : tebal | text-green-950 : hijau paling tua */
+    @apply text-3xl font-bold text-green-950 sm:text-4xl;
+  }
+
+  .terms-meta {
+    /* mt-2 : margin atas 8px | text-sm : 14px | text-gray-500 : abu-abu */
+    @apply mt-2 text-sm text-gray-500;
+  }
+
+  .terms-intro {
+    /* mt-6 : margin atas 24px
+       rounded-xl : sudut 12px | border border-green-100 : garis tepi hijau muda
+       bg-green-50 : latar hijau sangat muda | p-4 : padding 16px
+       text-sm : 14px | leading-6 : tinggi baris 24px | text-green-900 : teks hijau tua */
+    @apply mt-6 rounded-xl border border-green-100 bg-green-50 p-4 text-sm leading-6 text-green-900;
+  }
+
+  .terms-section {
+    /* mt-8 : jarak antar section 32px
+       scroll-mt-20 : saat dituju lewat #id, berhenti 80px di bawah tepi atas
+                      supaya tidak tertutup navbar sticky */
+    @apply mt-8 scroll-mt-20;
+  }
+
+  .terms-heading {
+    /* text-lg : 18px | font-bold : tebal | text-green-950 */
+    @apply text-lg font-bold text-green-950;
+  }
+
+  .terms-text {
+    /* mt-3 : margin atas 12px | text-sm : 14px | leading-7 : tinggi baris 28px | text-gray-700 */
+    @apply mt-3 text-sm leading-7 text-gray-700;
+  }
+
+  .terms-list {
+    /* mt-3 : margin atas 12px
+       list-disc : tiap butir diawali titik bulat
+       pl-5 : padding kiri 20px (ruang untuk titik)
+       space-y-2 : jarak antar butir 8px
+       text-sm leading-7 text-gray-700 : sama seperti paragraf */
+    @apply mt-3 list-disc space-y-2 pl-5 text-sm leading-7 text-gray-700;
+  }
+
+  /* =====================================================================
+     2. CHECKBOX  —  "Saya menyetujui Syarat dan Ketentuan"
+     ===================================================================== */
+
+  .terms-check {
+    /* flex items-start : kotak centang dan teks berdampingan, sejajar di atas
+                          (agar tetap rapi bila teks turun ke dua baris)
+       gap-3 : jarak 12px | cursor-pointer : kursor jadi tangan saat di atas label */
+    @apply flex cursor-pointer items-start gap-3;
+  }
+
+  .terms-check-input {
+    /* mt-0.5 : turun 2px agar sejajar dengan baris pertama teks
+       h-4 w-4 : kotak 16px | shrink-0 : tidak mengecil saat ruang sempit
+       rounded : sudut sedikit membulat
+       cursor-pointer : kursor tangan
+       accent-lime-300 : warna centang mengikuti hijau limau CocoaScan */
+    @apply mt-0.5 h-4 w-4 shrink-0 cursor-pointer rounded accent-lime-300;
+  }
+
+  .terms-check-label {
+    /* text-sm : 14px | leading-5 : tinggi baris 20px | text-green-100 : hijau sangat muda
+       (cocok untuk form di atas latar hijau gelap) */
+    @apply text-sm leading-5 text-green-100;
+  }
+
+  .terms-check-link {
+    /* font-semibold : agak tebal | text-lime-300 : hijau limau
+       underline : bergaris bawah | underline-offset-2 : garis bawah turun 2px
+       hover:text-lime-200 : saat di-hover, lebih terang */
+    @apply font-semibold text-lime-300 underline underline-offset-2 hover:text-lime-200;
+  }
+
+  .terms-check-error {
+    /* mt-1.5 : margin atas 6px | text-xs : 12px | text-red-300 : merah muda (terbaca di latar gelap) */
+    @apply mt-1.5 text-xs text-red-300;
+  }
+}

@@ -17,3 +17,4 @@
 @import "./icon.css";      /* ukuran & warna ikon: .icon-sm, .icon-accent, ...   */
 @import "./section.css";   /* section & judul section                            */
 @import "./landing.css";   /* bagian khusus halaman Landing                      */
+@import "./terms.css";     /* untuk style terms and conditions                   */

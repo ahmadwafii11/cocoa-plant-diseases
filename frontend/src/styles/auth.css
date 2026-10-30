@@ -1,0 +1,216 @@
+/* =========================================================================
+   auth.css  —  halaman Login & Register (kerangka, kartu, form, alert)
+
+   Isi berurutan:
+       1. KERANGKA HALAMAN   (components/auth/AuthCard.tsx)
+       2. KARTU
+       3. ALERT              (components/ui/Alert.tsx)
+       4. FORM FIELD         (components/ui/FormField.tsx, PasswordField.tsx)
+       5. LINK PINDAH HALAMAN
+
+   Latar halaman memakai class .page (layout.css) yang sama dengan Landing,
+   jadi warna gradasi hijau tua-nya otomatis serasi.
+   ========================================================================= */
+
+@layer components {
+
+  /* =====================================================================
+     1. KERANGKA HALAMAN
+     ===================================================================== */
+
+  .auth-page {
+    /* (dipakai bersama .page: flex-col + latar gradasi + min-h-screen)
+       items-center     : konten di tengah secara HORIZONTAL
+       justify-center   : konten di tengah secara VERTIKAL
+       px-4             : padding kiri-kanan 16px
+       py-12            : padding atas-bawah 3rem = 48px */
+    @apply items-center justify-center px-4 py-12;
+  }
+
+  .auth-wrap {
+    /* w-full   : lebar penuh layar kecil
+       max-w-md : tapi tidak lebih dari 28rem = 448px */
+    @apply w-full max-w-md;
+  }
+
+  .auth-back {
+    /* tautan "Kembali ke beranda"
+       mb-6 : margin bawah 24px
+       inline-flex items-center gap-2 : ikon panah dan teks berdampingan, jarak 8px */
+    @apply mb-6 inline-flex items-center gap-2;
+
+    /* text-sm : 14px | font-medium : ketebalan sedang | text-green-200 : hijau muda */
+    @apply text-sm font-medium text-green-200;
+
+    /* transition : perubahan warna halus | hover:text-lime-200 : saat di-hover jadi hijau limau muda */
+    @apply transition hover:text-lime-200;
+  }
+
+  .auth-header {
+    /* mb-8 : margin bawah 32px | text-center : semua teks rata tengah */
+    @apply mb-8 text-center;
+  }
+
+  .auth-logo-box {
+    /* KOTAK pembungkus logo
+       mx-auto : di tengah | mb-4 : margin bawah 16px
+       flex items-center justify-center : logo di tengah kotak
+       h-16 w-16 : 64px | overflow-hidden : potong bagian yang keluar */
+    @apply mx-auto mb-4 flex h-16 w-16 items-center justify-center overflow-hidden;
+
+    /* rounded-2xl : sudut 16px | bg-white/15 : latar putih 15% | p-3 : padding 12px | shadow-lg : bayangan besar */
+    @apply rounded-2xl bg-white/15 p-3 shadow-lg;
+  }
+
+  .auth-logo {
+    /* h-full w-full : logo memenuhi kotak | object-contain : diperkecil agar muat utuh */
+    @apply h-full w-full object-contain;
+  }
+
+  .auth-title {
+    /* text-3xl : 30px | font-bold : tebal | text-white : putih */
+    @apply text-3xl font-bold text-white;
+  }
+
+  .auth-tagline {
+    /* mt-2 : margin atas 8px | text-sm : 14px | text-green-200 : hijau muda */
+    @apply mt-2 text-sm text-green-200;
+  }
+
+  /* =====================================================================
+     2. KARTU
+     ===================================================================== */
+
+  .auth-card {
+    /* rounded-3xl : sudut sangat membulat 24px
+       border border-white/10 : garis tepi putih 10%
+       bg-white/10 : latar putih 10% (efek kaca, sama seperti kartu di hero Landing)
+       shadow-2xl : bayangan paling besar
+       backdrop-blur-xl : latar belakang kartu dikaburkan 24px */
+    @apply rounded-3xl border border-white/10 bg-white/10 shadow-2xl backdrop-blur-xl;
+
+    /* p-6 : padding 24px | sm:p-8 : 32px (layar >= 640px) */
+    @apply p-6 sm:p-8;
+  }
+
+  .auth-card-head {
+    /* mb-6 : jarak judul kartu ke form 24px */
+    @apply mb-6;
+  }
+
+  .auth-card-title {
+    /* text-2xl : 24px | font-bold : tebal | text-white */
+    @apply text-2xl font-bold text-white;
+  }
+
+  .auth-card-subtitle {
+    /* mt-1 : margin atas 4px | text-sm : 14px | text-green-200 */
+    @apply mt-1 text-sm text-green-200;
+  }
+
+  .auth-form {
+    /* space-y-5 : jarak vertikal antar isi form 20px */
+    @apply space-y-5;
+  }
+
+  /* =====================================================================
+     3. ALERT  —  pesan galat / berhasil
+     ===================================================================== */
+
+  .alert {
+    /* mb-5 : margin bawah 20px | rounded-xl : sudut 12px | border : garis tepi 1px
+       px-4 : padding kiri-kanan 16px | py-3 : atas-bawah 12px | text-sm : 14px */
+    @apply mb-5 rounded-xl border px-4 py-3 text-sm;
+  }
+
+  .alert-error {
+    /* border-red-400/30 : garis merah 30% | bg-red-500/10 : latar merah 10% | text-red-200 : teks merah muda */
+    @apply border-red-400/30 bg-red-500/10 text-red-200;
+  }
+
+  .alert-success {
+    /* border-lime-300/30 : garis hijau limau 30% | bg-lime-300/10 : latar 10% | text-lime-200 : teks hijau limau muda */
+    @apply border-lime-300/30 bg-lime-300/10 text-lime-200;
+  }
+
+  /* =====================================================================
+     4. FORM FIELD  —  label + ikon + kolom isian
+     ===================================================================== */
+
+  .field-label {
+    /* mb-2 : margin bawah 8px | block : satu baris penuh
+       text-sm : 14px | font-medium : ketebalan sedang | text-green-100 : hijau sangat muda */
+    @apply mb-2 block text-sm font-medium text-green-100;
+  }
+
+  .field-control {
+    /* relative : patokan posisi untuk ikon di dalam kolom (absolute) */
+    @apply relative;
+  }
+
+  .field-icon {
+    /* IKON di sisi kiri dalam kolom isian
+       pointer-events-none : tidak menghalangi klik pada kolom
+       absolute left-3 : menempel 12px dari tepi kiri
+       top-1/2 -translate-y-1/2 : tepat di tengah secara vertikal
+       h-5 w-5 : 20px | text-green-200/70 : hijau muda 70% */
+    @apply pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-green-200/70;
+  }
+
+  .field-input {
+    /* w-full : selebar kolom | rounded-xl : sudut 12px
+       border border-white/15 : garis tepi putih 15% | bg-white/5 : latar putih 5% */
+    @apply w-full rounded-xl border border-white/15 bg-white/5;
+
+    /* py-3 : padding atas-bawah 12px
+       pl-10 : padding kiri 40px (ruang untuk ikon) | pr-4 : padding kanan 16px */
+    @apply py-3 pl-10 pr-4;
+
+    /* text-sm : 14px | text-white : teks yang diketik berwarna putih
+       placeholder:text-green-200/50 : teks petunjuk berwarna hijau muda 50% */
+    @apply text-sm text-white placeholder:text-green-200/50;
+
+    /* outline-none : hilangkan garis fokus bawaan browser | transition : perubahan halus */
+    @apply outline-none transition;
+
+    /* SAAT DIKLIK / DIFOKUSKAN:
+       focus:border-lime-300 : garis tepi jadi hijau limau
+       focus:ring-2 focus:ring-lime-300/30 : cincin 2px hijau limau 30% di sekeliling */
+    @apply focus:border-lime-300 focus:ring-2 focus:ring-lime-300/30;
+
+    /* SAAT DINONAKTIFKAN: disabled:opacity-60 : tampak pudar | disabled:cursor-not-allowed : kursor larangan */
+    @apply disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  .field-input-toggle {
+    /* untuk kolom password: padding kanan 48px (ruang untuk tombol mata) */
+    @apply pr-12;
+  }
+
+  .field-toggle {
+    /* TOMBOL mata di sisi kanan dalam kolom
+       absolute right-3 : 12px dari tepi kanan | top-1/2 -translate-y-1/2 : tengah vertikal */
+    @apply absolute right-3 top-1/2 -translate-y-1/2;
+
+    /* text-green-200/70 : hijau muda | transition : halus | hover:text-white : saat di-hover jadi putih */
+    @apply text-green-200/70 transition hover:text-white;
+
+    /* focus-visible:outline-none focus-visible:text-lime-300 : saat dipilih lewat keyboard, jadi hijau limau
+       disabled:cursor-not-allowed : kursor larangan saat nonaktif */
+    @apply focus-visible:text-lime-300 focus-visible:outline-none disabled:cursor-not-allowed;
+  }
+
+  /* =====================================================================
+     5. LINK PINDAH HALAMAN  —  "Belum punya akun? Daftar sekarang"
+     ===================================================================== */
+
+  .auth-switch {
+    /* mt-6 : margin atas 24px | text-center : rata tengah | text-sm : 14px | text-green-200 */
+    @apply mt-6 text-center text-sm text-green-200;
+  }
+
+  .auth-switch-link {
+    /* font-semibold : agak tebal | text-lime-300 : hijau limau | hover:text-lime-200 : saat di-hover lebih terang */
+    @apply font-semibold text-lime-300 hover:text-lime-200;
+  }
+}

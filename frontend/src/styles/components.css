@@ -18,3 +18,4 @@
 @import "./section.css";   /* section & judul section                            */
 @import "./landing.css";   /* bagian khusus halaman Landing                      */
 @import "./terms.css";     /* untuk style terms and conditions                   */
+@import "./auth.css";      /* untuk style page login and register                */

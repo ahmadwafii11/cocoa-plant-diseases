@@ -1,5 +1,5 @@
 use axum::{
-    routing::{get},
+    routing::{get, post,},
     Router,
 };
 use dotenvy::dotenv;
@@ -9,6 +9,7 @@ use tower_http::{
 };
 
 mod db;
+mod handlers;
 
 #[tokio::main]
 async fn main() {
@@ -30,6 +31,14 @@ async fn main() {
         .route("/", get(|| async {
             "CocoaScan API is running!"
         }))
+        .route(
+            "/api/auth/register",
+            post(handlers::auth::register),
+        )
+        .route(
+            "/api/auth/login",
+            post(handlers::auth::login),
+        )
         .layer(cors)
         .with_state(pool);
     

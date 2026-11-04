@@ -67,10 +67,10 @@
        border-white/10: warna garis putih 10% kepekatan (samar) */
     @apply border-b border-white/10;
 
-    /* bg-green-900/80  : latar hijau tua dengan 80% kepekatan (sedikit tembus)
+    /* bg-green-700/90  : latar hijau agak muda dengan 90% kepekatan (sedikit tembus)
        backdrop-blur-xl : konten di belakang navbar dikaburkan (blur 24px)
                           -> efek kaca buram saat scroll */
-    @apply bg-green-900/80 backdrop-blur-xl;
+    @apply bg-green-700/90 backdrop-blur-xl;
   }
 
   .navbar-inner {
@@ -110,6 +110,48 @@
        hover:bg-white/10  : saat di-hover, muncul latar putih tipis
        hover:text-lime-200: dan teks jadi hijau limau muda */
     @apply transition hover:bg-white/10 hover:text-lime-200;
+  }
+
+  .navbar-link-active {
+    /* penanda HALAMAN AKTIF (dipasang otomatis oleh NavLink)
+       bg--lime-300 : latar putih hijau limau muda | text-green-900 : teks hijau */
+    @apply bg-lime-300 text-green-900;
+  }
+
+  /* ----- Area pengguna setelah login (components/layout/UserActions.tsx) ----- */
+
+  .user-chip {
+    /* tautan avatar + nama menuju halaman profil
+       inline-flex items-center gap-2 : avatar dan nama berdampingan, jarak 8px
+       rounded-xl : sudut 12px | px-2 py-1.5 : padding 8px / 6px */
+    @apply inline-flex items-center gap-2 rounded-xl px-2 py-1.5;
+
+    /* text-sm : 14px | font-medium | text-white | transition : halus
+       hover:bg-white/10 : saat di-hover, muncul latar putih tipis */
+    @apply text-sm font-medium text-white transition hover:bg-white/10;
+  }
+
+  .user-avatar {
+    /* LINGKARAN avatar
+       flex items-center justify-center : huruf inisial di tengah
+       h-8 w-8 : 32px | shrink-0 : tidak mengecil | overflow-hidden : foto dipotong bulat
+       rounded-full : lingkaran penuh */
+    @apply flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full;
+
+    /* bg-lime-300 : latar hijau limau | text-sm font-bold : huruf inisial tebal 14px
+       text-green-950 : hijau paling tua (kontras dengan latar limau) */
+    @apply bg-lime-300 text-sm font-bold text-green-950;
+  }
+
+  .user-avatar-img {
+    /* h-full w-full object-cover : foto profil memenuhi lingkaran tanpa gepeng */
+    @apply h-full w-full object-cover;
+  }
+
+  .user-name {
+    /* hidden : disembunyikan di HP | sm:inline : tampil mulai layar >= 640px
+       max-w-[10rem] : lebar maksimum 160px | truncate : nama panjang dipotong "..." */
+    @apply hidden max-w-[10rem] truncate sm:inline;
   }
 
   .navbar-actions {

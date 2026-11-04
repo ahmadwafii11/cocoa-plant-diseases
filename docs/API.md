@@ -2,10 +2,10 @@
 
 Acuan bersama frontend (React) dan backend (Rust/Axum). Tipe TypeScript-nya ada di `frontend/src/types/`.
 
-- **Base URL (dev):** `http://localhost:8080/api`
+- **Base URL (dev):** `http://127.0.0.1:3000/api` (server Rust mendengarkan di port 3000)
 - **Format:** JSON, nama field `snake_case`, waktu dalam ISO 8601 (UTC).
 - **Autentikasi:** header `Authorization: Bearer <token>` (JWT). Endpoint bertanda 🔒 membutuhkannya.
-- **File statis:** gambar diakses lewat `http://localhost:8080/uploads/...` (di luar `/api`).
+- **File statis:** gambar diakses lewat `http://127.0.0.1:3000/uploads/...` (di luar `/api`).
 
 ## Format galat
 
@@ -37,8 +37,8 @@ Pesan `message` ditulis dalam bahasa Indonesia karena langsung ditampilkan ke pe
 Request:
 ```json
 {
-  "username": "wafi",
-  "full_name": "Ahmad Wafi Fathurrahamn",
+  "username": "ahmadwafii11",
+  "full_name": "Ahmad Wafi Fathurrahman",
   "email": "wafi@examplegmail.com",
   "password": "rahasia123"
 }

@@ -15,3 +15,19 @@ export interface NavItem {
     label: string;
     href: string;
 };
+
+export const ROUTES = {
+    home: "/beranda",
+    detect: "/deteksi-penyakit",
+    history: "/riwayat-deteksi",
+    disease: "/tentang-penyakit",
+    profile: "/profil",
+} as const;
+
+// Menu navigasi di navbar untuk pengguna yang sudah login
+export const APP_NAV_LINKS: NavItem[] = [
+    {label: "Beranda", href: ROUTES.home},
+    {label: "Deteksi", href: ROUTES.detect},
+    {label: "Riwayat", href: ROUTES.history},
+    {label: "Tentang Penyakit", href: ROUTES.disease},
+];

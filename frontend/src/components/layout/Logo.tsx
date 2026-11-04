@@ -8,13 +8,15 @@ import { APP_NAME, APP_TAGLINE } from "../../constants/site";
 interface LogoProps{
     // "sm" dipakai di footer
     size?: "md" | "sm";
+    // Tujuan klik logo. Default "/" (Landing); di area login pakai "/beranda".
+    to?: string;
     className?: string;
 }
 
 export default function Logo({size = "md", className}: LogoProps) {
     return(
         <Link
-            to="/"
+            to="{to}"
             aria-label={`${APP_NAME} - Beranda`}
             className={cn("logo", size === "sm" && "logo-sm", className)}
         >

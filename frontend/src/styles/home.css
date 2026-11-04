@@ -1,0 +1,111 @@
+/* =========================================================================
+   home.css  —  halaman Beranda (setelah login)
+
+   Isi berurutan:
+       1. HERO         (components/home/HomeHero.tsx)
+       2. KARTU MENU   (components/home/QuickActionCard.tsx)
+
+   Bagian "Tips Foto" tidak punya class sendiri: memakai .how-grid dan .step
+   dari landing.css. Kartu menu memakai .feature-card dari landing.css.
+   ========================================================================= */
+
+@layer components {
+
+  /* =====================================================================
+     1. HERO
+     ===================================================================== */
+
+  .home-hero {
+    /* relative : patokan posisi untuk foto & lapisan di dalamnya (absolute)
+       isolate  : membuat "tumpukan" sendiri, jadi lapisan di dalam tidak bocor
+                  menutupi navbar
+       overflow-hidden : bagian foto yang keluar dipotong */
+    @apply relative isolate overflow-hidden;
+  }
+
+  .home-hero-img {
+    /* FOTO latar
+       absolute inset-0 : menutupi seluruh section (atas, bawah, kiri, kanan = 0)
+       h-full w-full    : ukuran penuh
+       object-cover     : foto diperbesar/dipotong agar menutupi penuh tanpa gepeng */
+    @apply absolute inset-0 h-full w-full object-cover;
+  }
+
+  .home-hero-overlay {
+    /* LAPISAN gelap di atas foto agar teks putih terbaca
+       absolute inset-0 : menutupi seluruh foto
+       bg-gradient-to-b : gradasi dari ATAS ke bawah (to Bottom)
+       from-green-950/90: awal (atas) hijau paling tua, 90% pekat
+       via-green-950/70 : tengah, 70% pekat
+       to-green-900     : akhir (bawah) hijau tua penuh, menyatu dengan section berikutnya */
+    @apply absolute inset-0 bg-gradient-to-b from-green-950/90 via-green-950/70 to-green-900;
+  }
+
+  .home-hero-inner {
+    /* (dipakai bersama .container-narrow)
+       relative    : tampil DI ATAS foto dan lapisan gelap
+       text-center : semua teks rata tengah
+       py-24 : padding atas-bawah 6rem = 96px
+       sm:py-32 : 8rem = 128px (>= 640px) | lg:py-40 : 10rem = 160px (>= 1024px) */
+    @apply relative py-24 text-center sm:py-32 lg:py-40;
+  }
+
+  .home-badge {
+    /* mb-6 : jarak badge ke judul 24px */
+    @apply mb-6;
+  }
+
+  .home-title {
+    /* text-4xl : 36px | sm:text-5xl : 48px | lg:text-6xl : 60px
+       font-extrabold : sangat tebal (800) | leading-tight : baris rapat
+       tracking-tight : huruf dirapatkan sedikit | text-white */
+    @apply text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl;
+  }
+
+  .home-title-accent {
+    /* block : baris sendiri | text-lime-300 : hijau limau (aksen) */
+    @apply block text-lime-300;
+  }
+
+  .home-desc {
+    /* mx-auto : di tengah | mt-6 : margin atas 24px | max-w-2xl : lebar maks 672px */
+    @apply mx-auto mt-6 max-w-2xl;
+
+    /* text-base : 16px | sm:text-lg : 18px | leading-7 : tinggi baris 28px | text-green-100 */
+    @apply text-base leading-7 text-green-100 sm:text-lg;
+  }
+
+  .home-actions {
+    /* mt-8 : margin atas 32px
+       flex flex-col sm:flex-row : tombol atas-bawah di HP, menyamping di >= 640px
+       items-center justify-center : tombol di tengah | gap-3 : jarak 12px */
+    @apply mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row;
+  }
+
+  /* =====================================================================
+     2. KARTU MENU  —  .feature-card yang bisa diklik
+     ===================================================================== */
+
+  .action-card {
+    /* block : <a> bawaannya inline, dibuat blok agar padding & border penuh */
+    @apply block;
+  }
+
+  .action-card-more {
+    /* mt-5 : margin atas 20px
+       inline-flex items-center gap-1.5 : teks dan panah berdampingan, jarak 6px
+       text-sm : 14px | font-semibold : agak tebal | text-green-700 : hijau sedang */
+    @apply mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-green-700;
+  }
+
+  .action-card-arrow {
+    /* transition-transform : pergeseran panah berjalan halus */
+    @apply transition-transform;
+  }
+
+  /* Saat KARTU di-hover, panah bergeser sedikit ke kanan */
+  .action-card:hover .action-card-arrow {
+    /* translate-x-1 : geser 4px ke kanan */
+    @apply translate-x-1;
+  }
+}

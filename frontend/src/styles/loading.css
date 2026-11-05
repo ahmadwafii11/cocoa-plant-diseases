@@ -1,0 +1,24 @@
+@layer components {
+    .loading-container {
+        @apply flex flex-col items-center justify-center gap-4 p-6;
+    }
+
+    .loading-fullscreen {
+        @apply min-h-screen w-full;
+    }
+
+    .loading-spinner {
+        @apply h-12 w-12 animate-spin rounded-full border-4 border-gray-200 border-t-green-700;
+    }
+
+    .loading-text {
+        @apply m-0 animate-pulse text-sm text-green-700;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .loading-spinner,
+        .loading-text {
+            animation: none;
+        }
+    }
+}

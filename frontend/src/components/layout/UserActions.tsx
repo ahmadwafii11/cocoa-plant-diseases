@@ -2,7 +2,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { LogOut } from "lucide-react";
 
 import { ROUTES } from "../../constants/site";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../hooks/useAuth";
+
 import Button from "../ui/Button";
 import { assetUrl } from "../../services/api";
 

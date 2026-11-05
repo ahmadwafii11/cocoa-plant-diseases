@@ -4,7 +4,7 @@ import { Mail } from "lucide-react";
 
 import { APP_NAME } from "../constants/site";
 
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../hooks/useAuth";
 
 import AuthCard from "../components/auth/AuthCard";
 

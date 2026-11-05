@@ -5,7 +5,6 @@
  */
 export const APP_NAME = "CocoaScan";
 export const APP_TAGLINE = "Smart Cocoa Disease Detection";
-
 export const MODEL_NAME = "ResNet50-CBAM";
 export const CLASS_COUNT = 4;
 
@@ -17,9 +16,17 @@ export interface NavItem {
 };
 
 export const ROUTES = {
+    // PUBLIC ROUTES
+    landing: "/",
+    login: "/login",
+    register: "/register",
+    terms: "/syarat-ketentuan",
+
+    // PROTECTED ROUTES
     home: "/beranda",
     detect: "/deteksi-penyakit",
     history: "/riwayat-deteksi",
+    result: "/hasil-deteksi/:id",
     disease: "/tentang-penyakit",
     profile: "/profil",
 } as const;

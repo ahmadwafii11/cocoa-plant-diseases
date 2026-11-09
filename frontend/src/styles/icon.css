@@ -41,4 +41,9 @@
        Untuk ikon, "text-" berarti warna garis ikon. */
     @apply text-lime-300;
   }
+
+  .icon-muted {
+    /* text-green-200/70 : hijau muda 70% (ikon pendamping teks, tidak mencolok) */
+    @apply text-green-200/70;
+  }
 }

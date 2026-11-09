@@ -1,0 +1,280 @@
+/* =========================================================================
+   profile.css  —  halaman Profil
+
+   Isi berurutan:
+       1. HEADER PROFIL        (components/profile/ProfileHeader.tsx, AvatarUploader.tsx)
+       2. KARTU                (ProfileCard.tsx, PersonalInfo.tsx)
+       3. KEAMANAN & CATATAN   (SecurityCard.tsx, AccountNote.tsx)
+       4. MODAL                (components/ui/Modal.tsx)
+       5. TEKS BANTUAN FORM    (components/ui/FormField.tsx)
+
+   Tombol, alert, dan kolom isian memakai class yang sudah ada
+   (button.css dan auth.css), jadi tampilannya otomatis serasi.
+   ========================================================================= */
+
+@layer components {
+
+  /* =====================================================================
+     TATA LETAK HALAMAN
+     ===================================================================== */
+
+  .profile-main {
+    /* (dipakai bersama .container-narrow)
+       space-y-6 : jarak vertikal antar kartu 24px
+       py-10 : padding atas-bawah 40px | sm:py-14 : 56px (>= 640px) */
+    @apply space-y-6 py-10 sm:py-14;
+  }
+
+  /* =====================================================================
+     1. HEADER PROFIL
+     ===================================================================== */
+
+  .profile-hero {
+    /* (dipakai bersama .profile-card)
+       flex flex-col : susun atas-bawah di HP | md:flex-row : menyamping di >= 768px
+       items-center : rata tengah | gap-6 : jarak antar bagian 24px
+       p-6 : padding 24px | sm:p-8 : 32px */
+    @apply flex flex-col items-center gap-6 p-6 sm:p-8 md:flex-row;
+  }
+
+  .profile-avatar-block {
+    /* foto + tombol di bawahnya, tersusun atas-bawah di tengah
+       flex flex-col items-center : atas-bawah, rata tengah | gap-3 : jarak 12px */
+    @apply flex flex-col items-center gap-3;
+  }
+
+  .profile-avatar {
+    /* relative : patokan posisi tombol kamera (absolute) */
+    @apply relative;
+  }
+
+  .profile-avatar-circle {
+    /* LINGKARAN foto
+       flex items-center justify-center : huruf cadangan di tengah
+       h-28 w-28 : 112px | sm:h-32 sm:w-32 : 128px (>= 640px)
+       overflow-hidden rounded-full : foto dipotong menjadi lingkaran */
+    @apply flex h-28 w-28 items-center justify-center overflow-hidden rounded-full sm:h-32 sm:w-32;
+
+    /* bg-white/10 : latar putih 10% | ring-4 ring-lime-300/40 : cincin 4px hijau limau 40% */
+    @apply bg-white/10 ring-4 ring-lime-300/40;
+
+    /* text-4xl font-bold text-lime-300 : huruf cadangan besar, tebal, hijau limau */
+    @apply text-4xl font-bold text-lime-300;
+  }
+
+  .profile-avatar-img {
+    /* h-full w-full : memenuhi lingkaran | object-cover : dipotong agar tidak gepeng */
+    @apply h-full w-full object-cover;
+  }
+
+  .profile-avatar-edit {
+    /* TOMBOL kamera kecil di pojok kanan-bawah foto
+       absolute bottom-0 right-0 : menempel di pojok kanan-bawah
+       flex items-center justify-center : ikon di tengah
+       h-9 w-9 : 36px | rounded-full : bulat | cursor-pointer : kursor tangan */
+    @apply absolute bottom-0 right-0 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full;
+
+    /* bg-lime-300 text-green-950 : latar hijau limau, ikon hijau tua | shadow-lg : bayangan */
+    @apply bg-lime-300 text-green-950 shadow-lg;
+
+    /* transition hover:bg-lime-200 : saat di-hover lebih terang */
+    @apply transition hover:bg-lime-200;
+
+    /* focus-within:ring-2 focus-within:ring-white : saat input di dalamnya dipilih lewat keyboard, muncul cincin putih */
+    @apply focus-within:ring-2 focus-within:ring-white;
+  }
+
+  .profile-avatar-actions {
+    /* flex gap-2 : tombol Simpan dan Batal berdampingan, jarak 8px */
+    @apply flex gap-2;
+  }
+
+  .profile-avatar-error {
+    /* max-w-[14rem] : lebar maks 224px agar pesan tidak melebarkan kolom foto
+       (.alert punya mb-5; di sini dibuang agar rapat) */
+    @apply max-w-[14rem] [&>.alert]:mb-0;
+  }
+
+  .profile-hero-info {
+    /* flex-1 : mengambil sisa ruang | text-center md:text-left : rata tengah di HP, kiri di layar lebar */
+    @apply flex-1 text-center md:text-left;
+  }
+
+  .profile-name {
+    /* text-3xl : 30px | font-bold : tebal | text-white | break-words : nama panjang boleh turun baris */
+    @apply break-words text-3xl font-bold text-white;
+  }
+
+  .profile-username {
+    /* mt-1 : margin atas 4px | text-green-200 : hijau muda */
+    @apply mt-1 text-green-200;
+  }
+
+  .profile-meta {
+    /* mt-3 : margin atas 12px | flex items-center gap-2 : ikon + teks berdampingan
+       justify-center md:justify-start : tengah di HP, kiri di layar lebar
+       text-sm : 14px | text-green-200 */
+    @apply mt-3 flex items-center justify-center gap-2 text-sm text-green-200 md:justify-start;
+  }
+
+  /* =====================================================================
+     2. KARTU  —  kartu kaca (sama gayanya dengan kartu Login/Register)
+     ===================================================================== */
+
+  .profile-card {
+    /* rounded-3xl : sudut 24px | border border-white/10 : garis tepi putih 10%
+       bg-white/10 : latar putih 10% | shadow-2xl : bayangan besar
+       backdrop-blur-xl : latar belakang dikaburkan */
+    @apply rounded-3xl border border-white/10 bg-white/10 shadow-2xl backdrop-blur-xl;
+  }
+
+  .profile-card-head {
+    /* flex items-center gap-3 : ikon + judul berdampingan, jarak 12px
+       border-b border-white/10 : garis pemisah di bawah kepala kartu
+       px-6 : padding kiri-kanan 24px | py-5 : atas-bawah 20px */
+    @apply flex items-center gap-3 border-b border-white/10 px-6 py-5;
+  }
+
+  .profile-card-icon {
+    /* KOTAK ikon: flex center, 40px, sudut 12px, latar hijau limau 15%, ikon hijau limau */
+    @apply flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-lime-300/15 text-lime-300;
+  }
+
+  .profile-card-title {
+    /* text-lg : 18px | font-semibold : agak tebal | text-white */
+    @apply text-lg font-semibold text-white;
+  }
+
+  .profile-card-desc {
+    /* text-sm : 14px | text-green-200 */
+    @apply text-sm text-green-200;
+  }
+
+  .profile-info-grid {
+    /* grid : tata letak kisi | gap-6 : jarak 24px | p-6 : padding 24px
+       md:grid-cols-2 : dua kolom di layar >= 768px */
+    @apply grid gap-6 p-6 md:grid-cols-2;
+  }
+
+  .profile-info-label {
+    /* text-sm : 14px | font-medium : sedang | text-green-200 */
+    @apply text-sm font-medium text-green-200;
+  }
+
+  .profile-info-value {
+    /* mt-2 : margin atas 8px | flex items-center gap-2 : ikon + nilai berdampingan
+       text-base : 16px | font-semibold : agak tebal | text-white
+       break-all : email panjang dipecah agar tidak keluar kartu */
+    @apply mt-2 flex items-center gap-2 break-all text-base font-semibold text-white;
+  }
+
+  /* =====================================================================
+     3. KEAMANAN & CATATAN
+     ===================================================================== */
+
+  .profile-security-row {
+    /* flex flex-col md:flex-row : atas-bawah di HP, menyamping di >= 768px
+       gap-4 : jarak 16px | p-6 : padding 24px
+       md:items-center md:justify-between : teks di kiri, tombol di kanan */
+    @apply flex flex-col gap-4 p-6 md:flex-row md:items-center md:justify-between;
+  }
+
+  .profile-security-info {
+    /* flex items-center gap-4 : ikon + teks berdampingan, jarak 16px */
+    @apply flex items-center gap-4;
+  }
+
+  .profile-security-icon {
+    /* LINGKARAN ikon gembok: 44px, bulat, latar putih 10%, ikon hijau sangat muda */
+    @apply flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white/10 text-green-100;
+  }
+
+  .profile-security-title {
+    /* font-semibold : agak tebal | text-white */
+    @apply font-semibold text-white;
+  }
+
+  .profile-note {
+    /* flex gap-4 : ikon + teks berdampingan | rounded-3xl : sudut 24px
+       border border-lime-300/20 : garis hijau limau 20% | bg-lime-300/10 : latar 10% | p-6 : padding 24px */
+    @apply flex gap-4 rounded-3xl border border-lime-300/20 bg-lime-300/10 p-6;
+  }
+
+  .profile-note-icon {
+    /* LINGKARAN ikon: 40px, bulat, latar putih 10%, ikon hijau limau | shrink-0 : tidak mengecil */
+    @apply flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/10 text-lime-300;
+  }
+
+  .profile-note-title {
+    /* font-semibold : agak tebal | text-lime-200 : hijau limau muda */
+    @apply font-semibold text-lime-200;
+  }
+
+  .profile-note-text {
+    /* mt-1 : margin atas 4px | text-sm : 14px | leading-relaxed : baris agak longgar | text-green-100 */
+    @apply mt-1 text-sm leading-relaxed text-green-100;
+  }
+
+  /* =====================================================================
+     4. MODAL  —  jendela dialog (Edit Profil, Ubah Password)
+     ===================================================================== */
+
+  .modal-overlay {
+    /* LAPISAN gelap di belakang jendela
+       fixed inset-0 : menutupi seluruh layar | z-50 : di atas semua elemen
+       flex items-center justify-center : jendela di tengah | px-4 : padding kiri-kanan 16px
+       bg-black/60 : hitam 60% | backdrop-blur-sm : latar dikaburkan sedikit */
+    @apply fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4 backdrop-blur-sm;
+  }
+
+  .modal-panel {
+    /* JENDELA: w-full max-w-lg : selebar layar tapi maks. 512px
+       max-h-[90vh] overflow-y-auto : bila terlalu tinggi, bisa digulir
+       rounded-3xl : sudut 24px | border border-white/10 | bg-green-950 : hijau paling tua
+       shadow-2xl : bayangan besar */
+    @apply max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-3xl border border-white/10 bg-green-950 shadow-2xl;
+  }
+
+  .modal-head {
+    /* flex items-start justify-between : judul di kiri, tombol X di kanan
+       border-b border-white/10 : garis pemisah | px-6 py-5 : padding */
+    @apply flex items-start justify-between gap-4 border-b border-white/10 px-6 py-5;
+  }
+
+  .modal-title {
+    /* text-xl : 20px | font-semibold | text-white */
+    @apply text-xl font-semibold text-white;
+  }
+
+  .modal-subtitle {
+    /* mt-1 : margin atas 4px | text-sm : 14px | text-green-200 */
+    @apply mt-1 text-sm text-green-200;
+  }
+
+  .modal-close {
+    /* rounded-lg : sudut 8px | p-2 : padding 8px | text-green-200/70 : hijau muda
+       transition hover:bg-white/10 hover:text-white : saat di-hover latar & teks lebih terang
+       disabled:... : saat nonaktif tampak pudar, kursor larangan */
+    @apply rounded-lg p-2 text-green-200/70 transition hover:bg-white/10 hover:text-white;
+    @apply disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .modal-body {
+    /* px-6 : padding kiri-kanan 24px | py-6 : atas-bawah 24px */
+    @apply px-6 py-6;
+  }
+
+  .modal-actions {
+    /* flex justify-end gap-3 : tombol di kanan, jarak 12px | pt-2 : jarak atas 8px */
+    @apply flex justify-end gap-3 pt-2;
+  }
+
+  /* =====================================================================
+     5. TEKS BANTUAN FORM
+     ===================================================================== */
+
+  .field-hint {
+    /* mt-1.5 : margin atas 6px | text-xs : 12px | text-green-200/70 : hijau muda 70% */
+    @apply mt-1.5 text-xs text-green-200/70;
+  }
+}

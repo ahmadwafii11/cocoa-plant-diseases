@@ -21,3 +21,4 @@
 @import "./auth.css";      /* untuk style page login and register                */
 @import "./home.css";      /* untuk style page beranda after user login          */
 @import "./loading.css";   /* untuk style page loading                           */
+@import ".profile";        /* untuk style page profil                            */

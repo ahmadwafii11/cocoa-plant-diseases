@@ -1,15 +1,22 @@
 use axum::{
-    routing::{get, post,},
+    routing::{get, post, put},
     Router,
+    extract::DefaultBodyLimit,
 };
 use dotenvy::dotenv;
 use std::env;
 use tower_http::{
     cors::{Any, CorsLayer},
+    services::ServeDir,
 };
 
 mod db;
 mod handlers;
+mod core;
+mod middleware;
+mod models;
+mod services;
+mod repositories;
 
 #[tokio::main]
 async fn main() {
@@ -27,6 +34,25 @@ async fn main() {
         .allow_methods(Any)
         .allow_headers(Any);
 
+    let protected_routes = Router::new()
+        .route(
+            "/api/users/me",
+            get(handlers::user::get_user_me)
+                .put(handlers::user::update_user_me),
+        )
+        .route(
+            "/api/users/me/profile-image",
+            put(handlers::user::upload_profile_image)
+                .layer(DefaultBodyLimit::max(7 * 1024 * 1024)),
+        )
+        .route(
+            "/api/users/me/password",
+            put(handlers::user::change_password),
+        )
+        .layer(axum::middleware::from_fn(
+            middleware::auth::auth_middleware,
+        ));
+
     let app = Router::new()
         .route("/", get(|| async {
             "CocoaScan API is running!"
@@ -38,6 +64,11 @@ async fn main() {
         .route(
             "/api/auth/login",
             post(handlers::auth::login),
+        )
+        .merge(protected_routes)
+        .nest_service(
+            "/uploads/profile",
+            ServeDir::new("uploads/profile"),
         )
         .layer(cors)
         .with_state(pool);

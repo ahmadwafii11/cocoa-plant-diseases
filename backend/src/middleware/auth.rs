@@ -1,6 +1,6 @@
 use axum::{
-    extract::Request,
-    http::StatusCode,
+    extract::{FromRequestParts, Request},
+    http::request::Parts,
     middleware::Next,
     response::Response,
 };
@@ -16,6 +16,7 @@ use jsonwebtoken::{
 };
 use std::env;
 
+use crate::core::error::AppError;
 use crate::models::auth::Claims;
 
 pub fn create_jwt(user_id:i64) -> Result<String, String> {
@@ -71,21 +72,52 @@ pub fn get_user_id_from_claims(claims: &Claims) -> Result<i64, String> {
 pub async fn auth_middleware(
     mut request: Request,
     next: Next,
-) -> Result<Response, StatusCode> {
+) -> Result<Response, AppError> {
     let auth_header = request 
         .headers()
         .get("Authorization")
         .and_then(|value| value.to_str().ok())
-        .ok_or(StatusCode::UNAUTHORIZED)?;
+        .ok_or(AppError::Unauthorized("Token autentikasi tidak ditemukan.".to_string()))?;
     
     let token = auth_header
         .strip_prefix("Bearer ")
-        .ok_or(StatusCode::UNAUTHORIZED)?;
+        .ok_or(AppError::Unauthorized("Format token autentikasi tidak valid.".to_string()))?;
     
     let claims = verify_jwt(token)
-        .map_err(|_| StatusCode::UNAUTHORIZED)?;
+        .map_err(|_| AppError::Unauthorized("Sesi tidak valid atau sudah berakhir. Silahkan login kembali.".to_string()))?;
     
     request.extensions_mut().insert(claims);
 
     Ok(next.run(request).await)
+}
+
+// Extractor: ID user yang sedang login, diambil melalui JWT yang sudah diverifikasi oleh `auth_middleware`.
+// Pemakaian di handler: pub async fn get_user_me(AuthUser(user_id): AuthUser, ...) { ... }
+// Menggantikan blok `get_user_id_from_claims(&claims).map_err(...)` yang sebelumnya diulang di setiap handler.
+#[derive(Debug, Clone, Copy)]
+pub struct AuthUser(pub i64);
+
+impl<S> FromRequestParts<S> for AuthUser
+where 
+    S: Send + Sync,
+{
+    type Rejection = AppError;
+
+    async fn from_request_parts(
+        parts: &mut Parts,
+        _state: &S,
+    ) -> Result<Self, Self::Rejection> {
+        let claims = parts 
+            .extensions
+            .get::<Claims>()
+            .ok_or_else(|| {
+                AppError::Unauthorized("Autentikasi diperlukan.".to_string())
+            })?;
+        
+        let user_id = get_user_id_from_claims(claims).map_err(|_| {
+            AppError::Unauthorized("Token autentikasi tidak valid.".to_string())
+        })?;
+
+        Ok(AuthUser(user_id))
+    }   
 }

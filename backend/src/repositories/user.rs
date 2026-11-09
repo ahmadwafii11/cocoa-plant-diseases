@@ -11,9 +11,9 @@ macro_rules! user_columns {
 
 pub async fn find_by_id(pool: &PgPool, id: i64) -> Result<Option<User>, sqlx::Error> {
     sqlx::query_as::<_, User> (concat!(
-        "SELECT",
+        "SELECT ",
         user_columns!(),
-        "FROM users WHERE id = $1"
+        " FROM users WHERE id = $1"
     ))
     .bind(id)
     .fetch_optional(pool)
@@ -28,10 +28,10 @@ pub async fn update_profile(
     email: &str,
 ) -> Result <Option<User>, sqlx::Error> {
     sqlx::query_as::<_, User>(concat!(
-        "UPDATE users",
-        "SET username = $1, full_name = $2, email = $3, updated_at = NOW()",
-        "WHERE id = $4",
-        "RETURNING",
+        "UPDATE users ",
+        "SET username = $1, full_name = $2, email = $3, updated_at = NOW() ",
+        "WHERE id = $4 ",
+        "RETURNING ",
         user_columns!()
     ))
     .bind(username)
@@ -60,8 +60,7 @@ pub async fn update_password(
     password_hash: &str,
 ) -> Result<bool, sqlx::Error> {
     let result = sqlx::query(
-        "UPDATE users SET password = $1, updated_at = NOW()",
-        "WHERE id = $2",
+        "UPDATE users SET password = $1, updated_at = NOW() WHERE id = $2",
     )
     .bind(password_hash)
     .bind(id)
@@ -77,8 +76,7 @@ pub async fn find_profile_image(
     id: i64,
 ) -> Result<Option<String>, sqlx::Error> {
     let row = sqlx::query_scalar::<_, Option<String>>(
-        "SELECT profile_image FROM users",
-        "WHERE id = $1",
+        "SELECT profile_image FROM users WHERE id = $1",
     )
     .bind(id)
     .fetch_optional(pool)
@@ -93,10 +91,10 @@ pub async fn set_profile_image(
     public_path: &str,
 ) -> Result<Option<User>, sqlx::Error> {
     sqlx::query_as::<_, User>(concat!(
-        "UPDATE users",
-        "SET profile_image = $1, updated_at = NOW()",
-        "WHERE id = $2",
-        "RETURNING",
+        "UPDATE users ",
+        "SET profile_image = $1, updated_at = NOW() ",
+        "WHERE id = $2 ",
+        "RETURNING ",
         user_columns!()
     ))
     .bind(public_path)

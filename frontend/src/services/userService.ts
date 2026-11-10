@@ -1,6 +1,6 @@
 import { API_BASE_URL } from "./api";
 
-import type { UserProfile, UpdateUserProfileRequest, ChangePasswordRequest } from "../types/user";
+import type { User as UserProfile, UpdateUserProfileRequest, ChangePasswordRequest } from "../types/user";
 
 export async function getUserProfile(): Promise<UserProfile> {
     const token = localStorage.getItem("cocoascan_token");

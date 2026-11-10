@@ -1,40 +1,26 @@
-import { API_BASE_URL } from "./api";
+import { apiRequest } from "./api";
 import type { LoginRequest, LoginResponse, RegisterRequest, RegisterResponse } from "../types/auth";
+import type { User } from "../types/user";
 
-export async function login(credentials: LoginRequest): Promise<LoginResponse> {
-    const response = await fetch(`${API_BASE_URL}/auth/login`, {
+// POST /auth/register
+export function register(payload: RegisterRequest): Promise<RegisterResponse> {
+    return apiRequest<RegisterResponse>("/auth/register", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(credentials),
+        body: payload,
+        auth: false,
     });
-
-    if (!response.ok) {
-        const errorText = await response.text()
-        throw new Error(errorText || "Username atau password salah.");
-    }
-
-    const data: LoginResponse = await response.json();
-
-    return data
 }
 
-export async function register(data: RegisterRequest): Promise<RegisterResponse> {
-    const response = await fetch(`${API_BASE_URL}/auth/register`, {
+// POST /auth/login
+export function login(payload: LoginRequest): Promise<LoginResponse> {
+    return apiRequest<LoginResponse>("/auth/login", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
+        body: payload,
+        auth: false,
     });
+}
 
-    if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(errorText || "Gagal Dalam Melakukan Registrasi!")
-    }
-
-    const result: RegisterResponse = await response.json();
-
-    return result;
+// GET /users/me: data pengguna yang sedang login (butuh token).
+export function getCurrentUser() : Promise<User> {
+    return apiRequest<User>("/users/me");
 }

@@ -1,86 +1,93 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useState, type ReactNode } from "react";
 
 import { AuthContext } from "./authContext";
 
-import { login as loginService } from "../services/authService";
-
+import { setUnauthorizedHandler, tokenStorage } from "../services/api";
+import { login as loginRequest } from "../services/authService";
+import type { LoginRequest } from "../types/auth";
+import { getUserProfile } from "../services/userService";
 import type { User } from "../types/user";
-import type { LoginRequest, LoginResponse } from "../types/auth";
-
-const USER_KEY = "cocoascan_user";
-const TOKEN_KEY = "cocoascan_token";
 
 interface AuthProviderProps { children: ReactNode };
 
 export function AuthProvider({ children }: AuthProviderProps) {
     const [user, setUser] = useState<User | null>(null);
-    const [loading, setLoading] = useState(true);
+    const [token, setToken] = useState<string | null>(() => tokenStorage.get());
+    
+    // Apabila terdapat token tersimpan, kita harus memverifikasinya terlebih dahulu ke server.
+    const [loading, setLoading] = useState<boolean>(() => tokenStorage.get() !== null);
 
-    // Muat user dari localStorage saat aplikasi pertama kali dibuka
-    useEffect(() => {
-        const storedUser = localStorage.getItem(USER_KEY);
-
-        if (storedUser) {
-            try {
-                const parsedUser: User = JSON.parse(storedUser);
-                setUser(parsedUser);
-            } catch {
-                localStorage.removeItem(USER_KEY);
-            }
-        }
-
-        setLoading(false);
+    const logout = useCallback(() => {
+        tokenStorage.clear();
+        setToken(null);
+        setUser(null);
     }, []);
 
-    // Sinkronkan user ke localStorage setiap kali berubah.
-    // Dilewati selama loading supaya data tersimpan tidak terhapus sebelum selesai dibaca.
+    // Memulihkan sesi saat aplikasi pertama kali dibuka.
     useEffect(() => {
-        if (loading) {
+        if (!tokenStorage.get()) {
             return;
         }
 
-        if (user) {
-            localStorage.setItem(USER_KEY, JSON.stringify(user));
-        } else {
-            localStorage.removeItem(USER_KEY);
-        }
-    }, [user, loading]);
+        let cancelled = false;
 
-    const login = async (payload: LoginRequest): Promise<LoginResponse> => {
-        const response = await loginService(payload);
+        getUserProfile()
+            .then((currentUser) => {
+                if (!cancelled) setUser(currentUser);
+            })
+            .catch(() => {
+                if (!cancelled) logout();
+            })
+            .finally(() => {
+                if (!cancelled) setLoading(false);
+            });
 
-        const loggedInUser: User = {
-            id: response.user_id,
-            username: response.username,
-            full_name: response.full_name,
-            email: response.email,
-            profile_image: null,
+        return () => {
+            cancelled = true;
         };
+    }, [logout]);
 
-        localStorage.setItem(TOKEN_KEY, response.token);
-        setUser(loggedInUser);
+    // Apabila server menolak token (401) di tengah pemakaian, otomatis logout.
+    useEffect(() => {
+        setUnauthorizedHandler(logout);
 
-        return response;
-    };
+        return () => setUnauthorizedHandler(null);
+    }, [logout]);
 
-    const updateUser = (userData: Partial<User>) => {
-        setUser((currentUser) =>
-            currentUser ? { ...currentUser, ...userData } : null
-        );
-    };
+    const login = useCallback(async (payload: LoginRequest) => {
+        const response = await loginRequest(payload);
 
-    const logout = () => {
-        localStorage.removeItem(TOKEN_KEY);
-        setUser(null);
-    };
+        // Login hanya mengembalikan data ringkas; profil lengkap (termasuk
+        // foto) diambil dari /users/me. Token disimpan dulu agar terkirim.
+        tokenStorage.set(response.token);
+
+        try {
+            setUser(await getUserProfile());
+            setToken(response.token);
+        } catch (err) {
+            tokenStorage.clear();
+            throw err;
+        }
+    }, []);
+
+    const updateUser = useCallback((nextUser: User) => {
+        setUser(nextUser);
+    }, []);
+
+    const refreshUser = useCallback(async () => {
+        setUser(await getUserProfile());
+    }, []);
 
     return (
         <AuthContext.Provider
             value={{
                 user,
+                token,
+                isAuthenticated: token !== null && user !== null,
                 loading,
                 login,
                 updateUser,
+                refreshUser,
                 logout,
             }}
         >

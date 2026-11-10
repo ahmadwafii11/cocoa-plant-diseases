@@ -22,8 +22,8 @@ use crate::services::{
 };
 
 const MAX_PROFILE_IMAGE_SIZE: usize = 5 * 1024 * 1024;
-const PROFILE_IMAGE_DIR: &str = "uploads/profile";
-const PROFILE_IMAGE_URL_PREFIX: &str = "uploads/profile";
+const PROFILE_IMAGE_DIR: &str = "/uploads/profile";
+const PROFILE_IMAGE_URL_PREFIX: &str = "/uploads/profile";
 
 fn  user_not_found() -> AppError {
     AppError::NotFound("User tidak ditemukan.".to_string())

@@ -170,5 +170,5 @@ export function assetUrl(path: string | null): string | null {
     }
 
     // File statis ada di root server, bukan di bawah "/api".
-    return `${SERVER_BASE_URL}${path}`;
+    return `${SERVER_BASE_URL}${path.startsWith("/") ? path : `/${path}`}`;
 }

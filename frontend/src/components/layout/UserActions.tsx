@@ -22,7 +22,7 @@ export default function UserActions() {
     return(
         <>
             <Link to={ROUTES.profile} className="user-chip" aria-label="Profil saya">
-                <span className="use-avatar">
+                <span className="user-avatar">
                     {avatar ? (
                         <img src={avatar} alt="" className="user-avatar-img" />   
                     ) : (

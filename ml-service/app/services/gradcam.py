@@ -2,6 +2,26 @@ import tensorflow as tf
 import numpy as np
 import cv2
 
+# Model Grad-CAM dibuat sekali per (model, layer) lalu dipakai ulang.
+# Membuatnya di setiap request lambat dan memboroskan memory.
+_GRAD_MODELS = {}
+
+def _get_grad_model(model, target_layer_name):
+    key = (id(model), target_layer_name)
+    grad_model = _GRAD_MODELS.get(key)
+
+    if grad_model is None:
+        target_layer = model.get_layer(target_layer_name)
+
+        grad_model = tf.keras.models.Model(
+            inputs=model.inputs,
+            outputs=[target_layer.output, model.outputs[0]]
+        )
+
+        _GRAD_MODELS[key] = grad_model
+
+    return grad_model
+
 def generate_gradcam(
     model,
     image_path,
@@ -54,15 +74,7 @@ def generate_gradcam(
     # =========================
     # GRAD-CAM MODEL
     # =========================
-    target_layer = model.get_layer(target_layer_name)
-
-    grad_model = tf.keras.models.Model(
-        inputs=model.inputs,
-        outputs=[
-            target_layer.output,
-            model.outputs[0]
-        ]
-    )
+    grad_model = _get_grad_model(model, target_layer_name)
 
     # =========================
     # FORWARD + GRADIENT

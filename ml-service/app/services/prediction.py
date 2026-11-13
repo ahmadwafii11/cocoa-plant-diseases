@@ -1,9 +1,6 @@
 import numpy as np
 import tensorflow as tf
 
-from PIL import Image
-from pathlib import Path
-
 from app.services.preprocessing import preprocess_image
 from app.services.cbam import ConvolutionalBlockAttentionModule
 

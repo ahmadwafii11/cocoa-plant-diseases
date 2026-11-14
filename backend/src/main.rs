@@ -17,6 +17,7 @@ mod middleware;
 mod models;
 mod services;
 mod repositories;
+mod routes;
 
 #[tokio::main]
 async fn main() {
@@ -48,6 +49,19 @@ async fn main() {
         .route(
             "/api/users/me/password",
             put(handlers::user::change_password),
+        )
+        .route(
+            "/api/detection",
+            post(routes::detection::detect)
+                .layer(DefaultBodyLimit::max(12 * 1024 * 1024)),
+        )
+        .route(
+            "/api/detection-history",
+            get(handlers::detection::get_detection_history),
+        )
+        .route(
+            "/api/detection-history/detail/{id}",
+            get(handlers::detection::get_detection_detail),
         )
         .layer(axum::middleware::from_fn(
             middleware::auth::auth_middleware,

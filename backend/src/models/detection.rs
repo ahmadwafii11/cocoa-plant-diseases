@@ -31,3 +31,15 @@ pub struct DetectionHistory {
     pub model_version       : Option<String>,
     pub detected_at         : DateTime<Utc>,
 }
+
+#[derive(Debug, Serialize)]
+pub struct DetectionResponse {
+    pub id: i64,
+    pub class_name: String,
+    pub confidence: f64,
+    pub probabilities: std::collections::HashMap<String, f64>,
+    pub image_url: String,
+    pub gradcam_url: String,
+    pub original_filename: String,
+    pub model_version: String,
+}

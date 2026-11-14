@@ -2,6 +2,7 @@ use std::path::{
     Path,
     PathBuf,
 };
+use axum::extract::Multipart;
 use tokio::fs;
 use uuid::Uuid;
 
@@ -19,6 +20,14 @@ impl ImageKind {
             ImageKind::Jpeg => "jpg",
             ImageKind::Png => "png",
             ImageKind::Webp => "webp",
+        }
+    }
+
+    pub fn content_type(self) -> &'static str {
+        match self {
+            ImageKind::Jpeg => "image/jpeg",
+            ImageKind::Png => "image/png",
+            ImageKind::Webp => "image/webp",
         }
     }
 
@@ -48,6 +57,85 @@ pub fn validate_image(bytes: &[u8]) -> AppResult<ImageKind> {
     ImageKind::detect(bytes).ok_or_else(|| {
         AppError::UnsupportedMediaType("Format gambar harus JPG, PNG, atau WebP.".to_string())
     })
+}
+
+// Gambar hasil upload yang sudah lolos pemeriksaan ukuran dan isi.
+pub struct  UploadedImage {
+    pub bytes: Vec<u8>,
+    pub kind: ImageKind,
+
+    // Nama file asli dari klien yang sudah dibersihkan (aman untuk disimpan / ditampilkan).
+    pub original_filename: String,
+}
+
+// Membersihkan nama file dari klien (membuang folder, karakter aneh serta membatasi panjangnya).
+// Hasil tidak pernah kosong.
+pub fn sanitize_filename(name: &str) -> String {
+    let base = name.rsplit(['/', '\\'])
+        .next()
+        .unwrap_or("");
+
+    let cleaned: String = base
+        .chars()
+        .map(|c| {
+            if c.is_ascii_alphanumeric() || matches!(c, '.' | '-' | '_') {
+                c
+            } else {
+                '_'
+            }
+        })
+        .collect();
+
+    let cleaned: String = cleaned
+        .trim_matches('.')
+        .chars()
+        .take(100)
+        .collect();
+
+    if cleaned.is_empty() {
+        "image".to_string()
+    } else {
+        cleaned
+    }
+}
+
+// Membaca satu file gambar dari field multipart bernama `field_name`.
+// Dibaca per potongan: file melebihni `max_size` ditolak segera (413) tanpa dimuat penuh ke memori.
+// Field lain akan diabaikan.
+pub async  fn read_image_upload(
+    multipart: &mut Multipart,
+    field_name: &str,
+    max_size: usize,
+) -> AppResult<UploadedImage> {
+    let mut found: Option<UploadedImage> = None;
+
+    while let Some(mut field) = multipart.next_field()
+        .await? {
+            if field.name() != Some(field_name) {
+                continue;
+            }
+
+            let original_filename = sanitize_filename(field.file_name().unwrap_or(""));
+            let mut bytes: Vec<u8> = Vec::new();
+
+            while let Some(chunk) = field.chunk().await? {
+                if bytes.len() + chunk.len() > max_size {
+                    return Err(AppError::PayloadTooLarge(format!(
+                        "Ukuran gambar maksimal {} MB.",
+                        max_size / (1024 * 1024)
+                    )));
+                }
+
+                bytes.extend_from_slice(&chunk);
+            }
+
+            // Tipe diperiksa dari isi file, bukan dari nama / Content-Type kiriman dari klien
+            let kind = validate_image(&bytes)?;
+
+            found = Some(UploadedImage { bytes , kind, original_filename });
+        }
+
+        found.ok_or_else(|| AppError::BadRequest("File image wajib dikirim.".to_string()))
 }
 
 pub struct StoredImage {

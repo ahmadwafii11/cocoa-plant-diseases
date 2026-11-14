@@ -4,16 +4,12 @@ use axum::{
     Json,
 };
 use sqlx::PgPool;
-use argon2::{
-    Argon2,
-    PasswordHash,
-    PasswordHasher,
-    PasswordVerifier,
-    password_hash::SaltString,
-};
-use rand_core::OsRng;
 use validator::Validate;
 
+use crate::core::error::{
+    AppError,
+    AppResult,
+};
 use crate::middleware::auth::create_jwt;
 use crate::models::auth::{
     RegisterRequest,
@@ -21,83 +17,58 @@ use crate::models::auth::{
     LoginRequest,
     LoginResponse
 };
+use crate::services::password;
 
-
-fn validate_register_request(payload: &RegisterRequest) -> Result<(), String> {
+fn validate_register_request(payload: &RegisterRequest) -> AppResult<()> {
     if payload.username.trim().is_empty() {
-        return Err("Username wajib diisi.".to_string());
+        return Err(AppError::BadRequest("Username wajib diisi.".to_string()));
     }
 
     if payload.full_name.trim().is_empty() {
-        return Err("Nama lengkap wajib diisi.".to_string());
+        return Err(AppError::BadRequest("Nama lengkap wajib diisi.".to_string()));
     }
 
     if payload.email.trim().is_empty() {
-        return Err("Email wajib diisi.".to_string());
+        return Err(AppError::BadRequest("Email wajib diisi.".to_string()));
     }
 
     if payload.password.is_empty() {
-        return Err("Password wajib diisi.".to_string());
+        return Err(AppError::BadRequest("Password wajib diisi.".to_string()));
     }
 
     payload.validate().map_err(|errors| {
-        if errors.field_errors().contains_key("username") {
-            return "Username harus 1 - 50 karakter.".to_string();
-        }
+        let fields = errors.field_errors();
 
-        if errors.field_errors().contains_key("full_name") {
-            return "Nama lengkap harus 1 - 100 karakter.".to_string();
-        }
+        let message = if fields.contains_key("username") {
+            "Username harus 1 - 50 karakter."
+        } else if fields.contains_key("full_name"){
+            "Nama lengkap harus 1 -100 karakter."
+        } else if fields.contains_key("email") {
+            "Format email tidak valid atau email terlalu panjang."
+        } else if fields.contains_key("password") {
+            "Password harus 8 - 128 karakter."
+        } else {
+            "Data registrasi tidak valid."
+        }; 
 
-        if errors.field_errors().contains_key("email") {
-            return "Format email tidak valid atau email terlalu panjang.".to_string();
-        }
-
-        if errors.field_errors().contains_key("password") {
-            return "Password harus 8 - 128 karakter.".to_string();
-        }
-
-        "Data registrasi tidak valid.".to_string()
-    })?;
-    
-    Ok(())
+        AppError::BadRequest(message.to_string())
+    })
 }
 
+// POST /api/auth/register
 pub async fn register(
     State(pool): State<PgPool>,
-    Json(payload): Json<RegisterRequest>,
-) -> Result<
-    (StatusCode, Json<RegisterResponse>),
-    (StatusCode, Json<RegisterResponse>),
-> {
-    validate_register_request(&payload)
-        .map_err(|message| {
-            (
-                StatusCode::BAD_REQUEST,
-                Json(RegisterResponse { message }),
-            )
-        })?;
+    Json(mut payload): Json<RegisterRequest>,
+) -> AppResult<(StatusCode, Json<RegisterResponse>)> {
 
-    // Membuat salt secara random
-    let salt = SaltString::generate(&mut OsRng);
+    // Merapikan spasi di awal / akhir (password sengaja tidak di-trim)
+    payload.username = payload.username.trim().to_string();
+    payload.full_name = payload.full_name.trim().to_string();
+    payload.email = payload.email.trim().to_string();
 
-    // Hash password
-    let password_hash = Argon2::default()
-        .hash_password(
-            payload.password.as_bytes(),
-            &salt,
-        )
-        .map_err(|err| {
-            println!("Password hashing error: {:?}", err);
+    validate_register_request(&payload)?;
 
-            (
-                StatusCode::INTERNAL_SERVER_ERROR,
-                Json(RegisterResponse {
-                    message: "Gagal melakukan hashing password".to_string(),
-                }),
-            )
-        })?
-        .to_string();
+    let password_hash = password::hash_password(payload.password.clone()).await?;
 
     // Simpan user ke PostgreSQL
     sqlx::query(
@@ -118,40 +89,20 @@ pub async fn register(
     .execute(&pool)
     .await
     .map_err(|err| {
-        if let sqlx::Error::Database(db_err) = &err {
-            if let Some(constraint) = db_err.constraint() {
-                match constraint {
-                    "users_email_key" => {
-                        return ( 
-                            StatusCode::CONFLICT,
-                            Json(RegisterResponse {
-                                message: "Email telah digunakan.".to_string(),
-                            }),
-                        );
-                    }
-
-                    "users_username_key" => {
-                        return (
-                            StatusCode::CONFLICT,
-                            Json(RegisterResponse {
-                                message: "Username telah digunakan.".to_string(),
-                            }),
-                        );
-                    }
-
-                    _=> {}
+        // Pesan konflik spesifik sesuai constraint
+        if let sqlx::Error::Database(db_error) = &err {
+            match db_error.constraint() {
+                Some("users_email_key") => {
+                    return AppError::Conflict("Email telah digunakan.".to_string());
                 }
+                Some("users_username_key") => {
+                    return AppError::Conflict("Username telah digunakan.".to_string());
+                }
+                _=> {}
             }
         }
 
-        eprintln!("Database error saat register: {:?}", err);
-
-        (
-            StatusCode::INTERNAL_SERVER_ERROR,
-            Json(RegisterResponse {
-                message: "Terjadi kesalahan pada server.".to_string(),
-            }),
-        )
+        AppError::from(err) 
     })?;
 
     Ok((
@@ -162,84 +113,35 @@ pub async fn register(
     ))
 }
 
+// POST /api/auth/login
 pub async fn login(
     State(pool): State<PgPool>,
     Json(payload): Json<LoginRequest>,
-) -> Result<Json<LoginResponse>, (StatusCode, Json<serde_json::Value>)> {
+) -> AppResult<Json<LoginResponse>> {
+    let invalid = || AppError::Unauthorized("Email atau password salah".to_string());
+
+    let email = payload.email.trim().to_string();
 
     let user = sqlx::query!(
         r#"
-        SELECT
-            id,
-            username,
-            full_name,
-            email,
-            password
+        SELECT id, username, full_name, email, password
         FROM users
         WHERE email = $1
         "#,
-        payload.email
+        email
     )
     .fetch_optional(&pool)
-    .await
-    .map_err(|_| {
-        (
-            StatusCode::INTERNAL_SERVER_ERROR,
-            Json(serde_json::json!({
-                "message": "Terjadi kesalahan pada server"
-            })),
-        )
-    })?;
+    .await?
+    .ok_or_else(invalid)?;
 
-    let user = match user {
-        Some(user) => user,
-        None => {
-            return Err((
-                StatusCode::UNAUTHORIZED,
-                Json(serde_json::json!({
-                    "message": "Email atau password salah"
-                })),
-            ));
-        }
-    };
+    let is_valid = password::verify_password(payload.password, user.password).await?;
 
-    let parsed_hash = PasswordHash::new(&user.password)
-        .map_err(|_| {
-            (
-                StatusCode::INTERNAL_SERVER_ERROR,
-                Json(serde_json::json!({
-                    "message": "Password hash tidak valid"
-                })),
-            )
-        })?;
-
-    let password_valid = Argon2::default()
-        .verify_password(
-            payload.password.as_bytes(),
-            &parsed_hash,
-        )
-        .is_ok();
-
-    if !password_valid {
-        return Err((
-            StatusCode::UNAUTHORIZED,
-            Json(serde_json::json!({
-                "message": "Email atau password salah"
-            })),
-        ));
+    if !is_valid {
+        return Err(invalid());
     }
 
     let token = create_jwt(user.id)
-        .map_err(|err| {
-            eprintln!("JWT error: {}", err);
-
-            (
-                StatusCode::INTERNAL_SERVER_ERROR,
-                Json(serde_json::json!({
-                    "message": "Gagal membuat token autentikasi"
-                })),
-            )
-        })?;
+        .map_err(|err| AppError::Internal(format!("Gagal membuat JWT: {err}")))?;
 
     Ok(Json(LoginResponse {
         message: "Login berhasil".to_string(),

@@ -14,6 +14,7 @@ pub enum AppError {
     Conflict(String),
     PayloadTooLarge(String),
     UnsupportedMediaType(String),
+    ServiceUnavailable(String),
 
     // Detail Hanya tercatat di log server. Klien menerima pesan umum supaya isi galat database/file tidak bocor ke luar.
     Internal(String),
@@ -30,6 +31,7 @@ impl IntoResponse for AppError {
             AppError::Conflict(message) => (StatusCode::CONFLICT, message),
             AppError::PayloadTooLarge(message) => (StatusCode::PAYLOAD_TOO_LARGE, message),
             AppError::UnsupportedMediaType(message) => (StatusCode::UNSUPPORTED_MEDIA_TYPE, message),
+            AppError::ServiceUnavailable(message) => (StatusCode::SERVICE_UNAVAILABLE, message),
             AppError::Internal(detail) => {
                 eprintln!("[ERROR] {detail}");
                 (
@@ -53,6 +55,17 @@ impl From<sqlx::Error> for AppError {
         }
 
         AppError::Internal(format!("Kesalahan database: {err}"))
+    }
+}
+
+// Memungkinkan `?` pada pembacaan multipart. Melebihi batas body -> 413.
+impl From<axum::extract::multipart::MultipartError> for AppError {
+    fn from(err: axum::extract::multipart::MultipartError) -> Self {
+        if err.status() == StatusCode::PAYLOAD_TOO_LARGE {
+            AppError::PayloadTooLarge("Ukuran file terlalu besar.".to_string())
+        } else {
+            AppError::BadRequest(format!("Gagal membaca data upload: {}", err.body_text()))
+        }
     }
 }
 

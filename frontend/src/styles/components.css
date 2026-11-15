@@ -22,3 +22,4 @@
 @import "./home.css";      /* untuk style page beranda after user login          */
 @import "./loading.css";   /* untuk style page loading                           */
 @import ".profile";        /* untuk style page profil                            */
+@import "./detection.css"; /* untuk style page detection                         */

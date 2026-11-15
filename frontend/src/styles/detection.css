@@ -1,0 +1,346 @@
+/* =========================================================================
+   detection.css  —  halaman Deteksi Penyakit
+
+   Isi berurutan:
+       1. HERO               (components/detection/DetectHero.tsx)
+       2. KARTU & TATA LETAK (DetectCard.tsx, UploadCard.tsx, pages/DeteksiPenyakit.tsx)
+       3. DROPZONE           (ImageDropzone.tsx)
+       4. PRATINJAU          (ImagePreview.tsx)
+       5. STATUS             (StatusCard.tsx)
+       6. KELAS              (ClassesSection.tsx)
+
+   Tombol dan alert memakai class yang sudah ada (button.css, auth.css).
+   ========================================================================= */
+
+@layer components {
+
+  /* =====================================================================
+     1. HERO
+     ===================================================================== */
+
+  .detect-hero {
+    /* py-12 : padding atas-bawah 48px | sm:py-16 : 64px (>= 640px) */
+    @apply py-12 sm:py-16;
+  }
+
+  .detect-hero-inner {
+    /* max-w-3xl : teks tidak melebar lebih dari 768px */
+    @apply max-w-3xl;
+  }
+
+  .detect-badge {
+    /* mb-5 : jarak badge ke judul 20px */
+    @apply mb-5;
+  }
+
+  .detect-title {
+    /* text-4xl : 36px | sm:text-5xl : 48px | font-bold : tebal
+       tracking-tight : huruf dirapatkan sedikit | text-white */
+    @apply text-4xl font-bold tracking-tight text-white sm:text-5xl;
+  }
+
+  .detect-title-accent {
+    /* block : baris sendiri | text-lime-300 : hijau limau (aksen) */
+    @apply block text-lime-300;
+  }
+
+  .detect-desc {
+    /* mt-5 : margin atas 20px | max-w-2xl : lebar maks 672px
+       text-base : 16px | sm:text-lg : 18px | leading-7 : tinggi baris 28px | text-green-100 */
+    @apply mt-5 max-w-2xl text-base leading-7 text-green-100 sm:text-lg;
+  }
+
+  /* =====================================================================
+     2. KARTU & TATA LETAK
+     ===================================================================== */
+
+  .detect-area {
+    /* pb-12 : jarak bawah 48px | sm:pb-16 : 64px */
+    @apply pb-12 sm:pb-16;
+  }
+
+  .detect-grid {
+    /* grid : tata letak kisi | gap-8 : jarak 32px
+       lg:grid-cols-5 : layar >= 1024px dibagi 5 kolom (kiri 3, kanan 2) */
+    @apply grid gap-8 lg:grid-cols-5;
+  }
+
+  .detect-col-main {
+    /* lg:col-span-3 : memakai 3 dari 5 kolom */
+    @apply lg:col-span-3;
+  }
+
+  .detect-col-side {
+    /* lg:col-span-2 : memakai 2 dari 5 kolom */
+    @apply lg:col-span-2;
+  }
+
+  .detect-card {
+    /* h-full : kartu kiri dan kanan sama tinggi
+       rounded-3xl : sudut 24px | border border-white/10 : garis tepi putih 10%
+       bg-white/10 : latar putih 10% | shadow-2xl : bayangan besar
+       backdrop-blur-xl : latar belakang dikaburkan (efek kaca) */
+    @apply h-full rounded-3xl border border-white/10 bg-white/10 shadow-2xl backdrop-blur-xl;
+  }
+
+  .detect-card-head {
+    /* flex items-center gap-3 : ikon + judul berdampingan, jarak 12px
+       border-b border-white/10 : garis pemisah | px-6 py-5 : padding */
+    @apply flex items-center gap-3 border-b border-white/10 px-6 py-5;
+  }
+
+  .detect-card-icon {
+    /* KOTAK ikon: 40px, sudut 12px, latar hijau limau 15%, ikon hijau limau */
+    @apply flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-lime-300/15 text-lime-300;
+  }
+
+  .detect-card-title {
+    /* text-lg : 18px | font-semibold : agak tebal | text-white */
+    @apply text-lg font-semibold text-white;
+  }
+
+  .detect-card-desc {
+    /* text-sm : 14px | text-green-200 */
+    @apply text-sm text-green-200;
+  }
+
+  .detect-card-body {
+    /* p-6 : padding 24px | sm:p-8 : 32px (>= 640px) */
+    @apply p-6 sm:p-8;
+  }
+
+  .detect-alert {
+    /* mt-5 : jarak atas 20px
+       (.alert punya mb-5; di sini dibuang agar jarak ke tombol tidak dobel) */
+    @apply mt-5 [&>.alert]:mb-0;
+  }
+
+  .detect-submit {
+    /* mt-6 : jarak atas 24px dari gambar / pesan di atasnya */
+    @apply mt-6;
+  }
+
+  /* =====================================================================
+     3. DROPZONE  —  kotak "klik atau seret gambar"
+     ===================================================================== */
+
+  .dropzone {
+    /* flex flex-col items-center justify-center : isi tersusun atas-bawah, di tengah
+       w-full : selebar kartu | min-h-[22rem] : tinggi minimal 352px
+       gap-0 : (jarak diatur per elemen di bawah) | px-6 : padding kiri-kanan 24px */
+    @apply flex min-h-[22rem] w-full flex-col items-center justify-center px-6 text-center;
+
+    /* rounded-2xl : sudut 16px
+       border-2 border-dashed border-white/20 : garis putus-putus tebal 2px, putih 20%
+       bg-white/5 : latar putih 5% */
+    @apply rounded-2xl border-2 border-dashed border-white/20 bg-white/5;
+
+    /* transition : perubahan halus
+       hover:border-lime-300 : saat di-hover garis jadi hijau limau
+       hover:bg-white/10 : dan latar lebih terang */
+    @apply transition hover:border-lime-300 hover:bg-white/10;
+
+    /* disabled:cursor-not-allowed disabled:opacity-60 : saat nonaktif tampak pudar */
+    @apply disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  .dropzone-active {
+    /* SAAT FILE DISERET ke atas kotak: garis hijau limau + latar lebih terang */
+    @apply border-lime-300 bg-white/10;
+  }
+
+  .dropzone-icon {
+    /* KOTAK ikon unggah: 80px, sudut 16px, latar hijau limau 15%, ikon hijau limau */
+    @apply flex h-20 w-20 items-center justify-center rounded-2xl bg-lime-300/15 text-lime-300;
+  }
+
+  .dropzone-title {
+    /* mt-6 : margin atas 24px | text-lg : 18px | font-semibold | text-white */
+    @apply mt-6 text-lg font-semibold text-white;
+  }
+
+  .dropzone-text {
+    /* mt-2 : margin atas 8px | text-sm : 14px | text-green-200 */
+    @apply mt-2 text-sm text-green-200;
+  }
+
+  .dropzone-button {
+    /* TAMPILAN tombol (bukan tombol sungguhan; seluruh kotak yang diklik)
+       mt-5 : margin atas 20px | rounded-xl : sudut 12px
+       bg-lime-300 text-green-950 : latar hijau limau, teks hijau tua
+       px-5 py-2.5 : padding | text-sm font-semibold : 14px, agak tebal */
+    @apply mt-5 rounded-xl bg-lime-300 px-5 py-2.5 text-sm font-semibold text-green-950;
+  }
+
+  .dropzone:hover .dropzone-button {
+    /* saat KOTAK di-hover, "tombol" menjadi lebih terang */
+    @apply bg-lime-200;
+  }
+
+  .dropzone-hint {
+    /* mt-4 : margin atas 16px | text-xs : 12px | text-green-300 : hijau muda */
+    @apply mt-4 text-xs text-green-300;
+  }
+
+  /* =====================================================================
+     4. PRATINJAU  —  gambar terpilih
+     ===================================================================== */
+
+  .preview {
+    /* overflow-hidden : isi dipotong mengikuti sudut | rounded-2xl : sudut 16px
+       border border-white/10 : garis tepi | bg-black/20 : latar gelap 20% */
+    @apply overflow-hidden rounded-2xl border border-white/10 bg-black/20;
+  }
+
+  .preview-stage {
+    /* flex items-center justify-center : gambar di tengah | min-h-[22rem] : tinggi minimal 352px */
+    @apply flex min-h-[22rem] items-center justify-center;
+  }
+
+  .preview-img {
+    /* max-h-[30rem] : tinggi maks 480px | w-full : selebar kotak
+       object-contain : gambar diperkecil agar muat utuh tanpa terpotong */
+    @apply max-h-[30rem] w-full object-contain;
+  }
+
+  .preview-bar {
+    /* flex items-center justify-between : info file di kiri, tombol di kanan
+       gap-3 : jarak 12px | border-t border-white/10 : garis pemisah di atas
+       bg-white/5 : latar putih 5% | px-4 py-3 : padding */
+    @apply flex items-center justify-between gap-3 border-t border-white/10 bg-white/5 px-4 py-3;
+  }
+
+  .preview-file {
+    /* flex items-center gap-3 : ikon + nama berdampingan
+       min-w-0 : boleh menyusut agar nama panjang terpotong, bukan melebar */
+    @apply flex min-w-0 items-center gap-3;
+  }
+
+  .preview-file-icon {
+    /* KOTAK ikon: 36px, sudut 8px, latar putih 10%, ikon hijau limau | shrink-0 : tidak mengecil */
+    @apply flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/10 text-lime-300;
+  }
+
+  .preview-file-text {
+    /* min-w-0 : agar truncate pada nama file bekerja */
+    @apply min-w-0;
+  }
+
+  .preview-name {
+    /* truncate : nama panjang dipotong "..." | text-sm : 14px | font-medium | text-white */
+    @apply truncate text-sm font-medium text-white;
+  }
+
+  .preview-size {
+    /* text-xs : 12px | text-green-200 */
+    @apply text-xs text-green-200;
+  }
+
+  /* =====================================================================
+     5. STATUS  —  kartu kanan
+     ===================================================================== */
+
+  .detect-status {
+    /* flex flex-col items-center justify-center : isi di tengah, atas-bawah
+       min-h-[22rem] : tinggi minimal 352px | p-6 : padding 24px | text-center : teks rata tengah */
+    @apply flex min-h-[22rem] flex-col items-center justify-center p-6 text-center sm:p-8;
+  }
+
+  .detect-status-icon {
+    /* LINGKARAN ikon: 80px, bulat, latar putih 10%, ikon hijau muda */
+    @apply flex h-20 w-20 items-center justify-center rounded-full bg-white/10 text-green-200;
+  }
+
+  .detect-status-icon-busy {
+    /* SAAT MENGANALISIS: latar hijau limau 15%, ikon hijau limau */
+    @apply bg-lime-300/15 text-lime-300;
+  }
+
+  .detect-status-title {
+    /* mt-6 : margin atas 24px | font-semibold : agak tebal | text-white */
+    @apply mt-6 font-semibold text-white;
+  }
+
+  .detect-status-text {
+    /* mt-2 : margin atas 8px | max-w-xs : lebar maks 320px
+       text-sm : 14px | leading-6 : tinggi baris 24px | text-green-200 */
+    @apply mt-2 max-w-xs text-sm leading-6 text-green-200;
+  }
+
+  .detect-tips {
+    /* mt-6 : margin atas 24px | space-y-2 : jarak antar tips 8px | text-left : rata kiri */
+    @apply mt-6 space-y-2 text-left;
+  }
+
+  .detect-tip {
+    /* flex items-start gap-2 : ikon centang + teks berdampingan, jarak 8px
+       text-sm : 14px | text-green-100 : hijau sangat muda */
+    @apply flex items-start gap-2 text-sm text-green-100;
+  }
+
+  .detect-tip > svg {
+    /* shrink-0 : ikon tidak mengecil | mt-0.5 : turun 2px agar sejajar baris pertama */
+    @apply mt-0.5 shrink-0;
+  }
+
+  /* =====================================================================
+     6. KELAS  —  empat kelas yang dikenali model
+     ===================================================================== */
+
+  .classes-wrap {
+    /* py-12 : padding atas-bawah 48px | sm:py-14 : 56px */
+    @apply py-12 sm:py-14;
+  }
+
+  .classes-box {
+    /* grid gap-8 : dua bagian dengan jarak 32px | lg:grid-cols-2 lg:items-center : dua kolom di >= 1024px
+       rounded-3xl : sudut 24px | border border-white/10 | bg-white/10 : kaca
+       p-8 : padding 32px | sm:p-10 : 40px */
+    @apply grid gap-8 rounded-3xl border border-white/10 bg-white/10 p-8 sm:p-10 lg:grid-cols-2 lg:items-center;
+  }
+
+  .classes-eyebrow {
+    /* flex items-center gap-2 : ikon + teks berdampingan
+       text-sm font-medium text-lime-300 : kecil, sedang, hijau limau */
+    @apply flex items-center gap-2 text-sm font-medium text-lime-300;
+  }
+
+  .classes-title {
+    /* mt-3 : margin atas 12px | text-2xl : 24px | sm:text-3xl : 30px | font-bold | text-white */
+    @apply mt-3 text-2xl font-bold text-white sm:text-3xl;
+  }
+
+  .classes-desc {
+    /* mt-4 : margin atas 16px | text-sm : 14px | leading-6 : baris 24px | text-green-100 */
+    @apply mt-4 text-sm leading-6 text-green-100;
+  }
+
+  .classes-list {
+    /* grid gap-3 : daftar kisi, jarak 12px
+       sm:grid-cols-2 : dua kolom di >= 640px | lg:grid-cols-1 : satu kolom di >= 1024px */
+    @apply grid gap-3 sm:grid-cols-2 lg:grid-cols-1;
+  }
+
+  .class-item {
+    /* flex items-center gap-3 : ikon + nama + label berdampingan
+       rounded-xl : sudut 12px | bg-white/10 : latar putih 10% | px-4 py-3 : padding */
+    @apply flex items-center gap-3 rounded-xl bg-white/10 px-4 py-3;
+  }
+
+  .class-item-icon {
+    /* KOTAK ikon: 36px, sudut 8px, latar putih 10%, ikon hijau limau */
+    @apply flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/10 text-lime-300;
+  }
+
+  .class-item-name {
+    /* flex-1 : mengambil sisa ruang (label kategori terdorong ke kanan)
+       text-sm font-medium text-white */
+    @apply flex-1 text-sm font-medium text-white;
+  }
+
+  .class-item-tag {
+    /* label kategori kecil: rounded-full : pil | bg-white/10 | px-2.5 py-0.5 : padding
+       text-xs : 12px | text-green-100 */
+    @apply rounded-full bg-white/10 px-2.5 py-0.5 text-xs text-green-100;
+  }
+}

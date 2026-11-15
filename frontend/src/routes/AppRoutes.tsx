@@ -13,6 +13,7 @@ import TermsConditions from "../pages/TermsConditions";
 import Beranda from "../pages/Beranda";
 import Profil from "../pages/Profil";
 import DeteksiPenyakit from "../pages/DeteksiPenyakit";
+import HasilDeteksi from "../pages/HasilDeteksi";
 
 export default function AppRoutes() {
     return (
@@ -34,6 +35,7 @@ export default function AppRoutes() {
                     <Route path={ROUTES.home} element={<Beranda />} />
                     <Route path={ROUTES.profile} element={<Profil />} />
                     <Route path={ROUTES.detect} element={<DeteksiPenyakit />} />
+                    <Route path={ROUTES.result} element={<HasilDeteksi />} />
                 </Route>
             </Routes>
         </BrowserRouter>

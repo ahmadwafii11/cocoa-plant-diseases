@@ -12,6 +12,7 @@ import TermsConditions from "../pages/TermsConditions";
 
 import Beranda from "../pages/Beranda";
 import Profil from "../pages/Profil";
+import DeteksiPenyakit from "../pages/DeteksiPenyakit";
 
 export default function AppRoutes() {
     return (
@@ -32,6 +33,7 @@ export default function AppRoutes() {
                 <Route element={<ProtectedRoute />}>
                     <Route path={ROUTES.home} element={<Beranda />} />
                     <Route path={ROUTES.profile} element={<Profil />} />
+                    <Route path={ROUTES.detect} element={<DeteksiPenyakit />} />
                 </Route>
             </Routes>
         </BrowserRouter>

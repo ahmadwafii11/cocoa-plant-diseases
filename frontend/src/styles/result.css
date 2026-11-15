@@ -1,0 +1,248 @@
+/* =========================================================================
+   result.css  —  halaman Hasil Deteksi
+
+   Isi berurutan:
+       1. HEADER            (components/result/ResultHeader.tsx)
+       2. TATA LETAK        (pages/HasilDeteksi.tsx)
+       3. GAMBAR            (ResultImage.tsx, InputImageCard.tsx, GradcamCard.tsx)
+       4. PREDIKSI          (PredictionCard.tsx, ProbabilityBar.tsx)
+       5. INFORMASI         (DetectionInfo.tsx)
+       6. STATUS HALAMAN    (ResultLoading.tsx, ResultError.tsx)
+
+   Kartu memakai .glass-card (card.css); tombol memakai button.css.
+   ========================================================================= */
+
+@layer components {
+
+  /* =====================================================================
+     1. HEADER
+     ===================================================================== */
+
+  .result-header {
+    /* mb-8 : jarak ke konten di bawahnya 32px */
+    @apply mb-8;
+  }
+
+  .result-back {
+    /* inline-flex items-center gap-2 : ikon panah + teks berdampingan
+       text-sm font-medium : 14px, sedang | text-lime-300 : hijau limau
+       transition hover:text-lime-200 : saat di-hover lebih terang */
+    @apply inline-flex items-center gap-2 text-sm font-medium text-lime-300 transition hover:text-lime-200;
+  }
+
+  .result-header-row {
+    /* mt-4 : jarak atas 16px | flex flex-col : atas-bawah di HP
+       gap-4 : jarak 16px | md:flex-row : menyamping di >= 768px
+       md:items-end md:justify-between : judul di kiri, tombol di kanan sejajar bawah */
+    @apply mt-4 flex flex-col gap-4 md:flex-row md:items-end md:justify-between;
+  }
+
+  .result-title {
+    /* text-3xl : 30px | sm:text-4xl : 36px | font-bold : tebal | text-white */
+    @apply text-3xl font-bold text-white sm:text-4xl;
+  }
+
+  .result-subtitle {
+    /* mt-2 : margin atas 8px | text-green-100 : hijau sangat muda */
+    @apply mt-2 text-green-100;
+  }
+
+  .result-actions {
+    /* flex flex-wrap gap-3 : tombol berdampingan (turun baris bila sempit), jarak 12px */
+    @apply flex flex-wrap gap-3;
+  }
+
+  /* =====================================================================
+     2. TATA LETAK
+     ===================================================================== */
+
+  .result-main {
+    /* space-y-6 : jarak vertikal antar bagian 24px
+       py-10 : padding atas-bawah 40px | sm:py-12 : 48px */
+    @apply space-y-6 py-10 sm:py-12;
+  }
+
+  .result-grid {
+    /* grid gap-6 : kisi dengan jarak 24px | lg:grid-cols-2 : dua kolom di >= 1024px */
+    @apply grid gap-6 lg:grid-cols-2;
+  }
+
+  /* =====================================================================
+     3. GAMBAR
+     ===================================================================== */
+
+  .result-image-frame {
+    /* overflow-hidden : isi dipotong mengikuti sudut | rounded-2xl : sudut 16px
+       border border-white/10 : garis tepi | bg-black/20 : latar gelap 20% */
+    @apply overflow-hidden rounded-2xl border border-white/10 bg-black/20;
+  }
+
+  .result-image {
+    /* block : hilangkan celah bawah gambar | h-auto w-full : selebar kotak, tinggi mengikuti
+       object-contain : gambar utuh tanpa terpotong */
+    @apply block h-auto w-full object-contain;
+  }
+
+  .result-image-empty {
+    /* TAMPILAN CADANGAN bila gambar gagal dimuat
+       flex flex-col items-center justify-center gap-3 : ikon + teks, di tengah
+       min-h-[12rem] : tinggi minimal 192px | p-6 : padding 24px
+       text-center text-sm text-green-200 */
+    @apply flex min-h-[12rem] flex-col items-center justify-center gap-3 p-6 text-center text-sm text-green-200;
+  }
+
+  .result-filename {
+    /* mt-3 : margin atas 12px | truncate : nama panjang dipotong "..."
+       text-sm : 14px | text-green-200 */
+    @apply mt-3 truncate text-sm text-green-200;
+  }
+
+  /* =====================================================================
+     4. PREDIKSI
+     ===================================================================== */
+
+  .result-class-box {
+    /* rounded-2xl : sudut 16px | border border-lime-300/20 : garis hijau limau 20%
+       bg-lime-300/10 : latar 10% | p-6 : padding 24px | text-center : rata tengah */
+    @apply rounded-2xl border border-lime-300/20 bg-lime-300/10 p-6 text-center;
+  }
+
+  .result-class-label {
+    /* text-sm font-medium : 14px, sedang | text-lime-200 : hijau limau muda */
+    @apply text-sm font-medium text-lime-200;
+  }
+
+  .result-class-name {
+    /* mt-2 : margin atas 8px | text-3xl : 30px | font-bold | text-white */
+    @apply mt-2 text-3xl font-bold text-white;
+  }
+
+  .result-class-tag {
+    /* mt-3 : margin atas 12px | inline-flex items-center gap-2 : ikon + teks, jarak 8px
+       rounded-full : bentuk pil | bg-white/10 : latar putih 10% | px-3 py-1 : padding
+       text-sm : 14px | text-green-100 */
+    @apply mt-3 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-sm text-green-100;
+  }
+
+  .result-conf-label {
+    /* mt-5 : margin atas 20px | text-sm : 14px | text-green-100 */
+    @apply mt-5 text-sm text-green-100;
+  }
+
+  .result-conf-value {
+    /* mt-1 : margin atas 4px | text-4xl : 36px | font-bold | text-lime-300 : hijau limau */
+    @apply mt-1 text-4xl font-bold text-lime-300;
+  }
+
+  .result-warning {
+    /* mt-5 : jarak atas 20px
+       (.alert punya mb-5; di sini dibuang agar jarak bawah tidak berlebih) */
+    @apply mt-5 [&>.alert]:mb-0;
+  }
+
+  .result-explain {
+    /* mt-5 : margin atas 20px | text-sm : 14px | leading-6 : tinggi baris 24px | text-green-100 */
+    @apply mt-5 text-sm leading-6 text-green-100;
+  }
+
+  .result-section-title {
+    /* mb-4 : margin bawah 16px | mt-7 : margin atas 28px | font-semibold | text-white */
+    @apply mb-4 mt-7 font-semibold text-white;
+  }
+
+  .prob-list {
+    /* space-y-4 : jarak antar baris probabilitas 16px */
+    @apply space-y-4;
+  }
+
+  .prob-row {
+    /* mb-1 : margin bawah 4px | flex items-center justify-between : nama di kiri, persen di kanan
+       text-sm : 14px */
+    @apply mb-1 flex items-center justify-between text-sm;
+  }
+
+  .prob-name {
+    /* font-medium : sedang | text-green-50 : hijau hampir putih */
+    @apply font-medium text-green-50;
+  }
+
+  .prob-value {
+    /* text-green-200 : hijau muda */
+    @apply text-green-200;
+  }
+
+  .prob-track {
+    /* LAJUR batang: h-2 : tinggi 8px | overflow-hidden rounded-full : ujung bulat
+       bg-white/10 : latar putih 10% */
+    @apply h-2 overflow-hidden rounded-full bg-white/10;
+  }
+
+  .prob-fill {
+    /* ISI batang (lebarnya diatur lewat style inline sesuai persentase)
+       h-full : setinggi lajur | rounded-full : ujung bulat | bg-green-400 : hijau
+       transition-all : perubahan lebar berjalan halus */
+    @apply h-full rounded-full bg-green-400 transition-all;
+  }
+
+  .prob-fill-top {
+    /* UNTUK KELAS TERTINGGI: bg-lime-300 : hijau limau agar menonjol */
+    @apply bg-lime-300;
+  }
+
+  /* =====================================================================
+     5. INFORMASI
+     ===================================================================== */
+
+  .result-info-grid {
+    /* grid gap-5 : kisi dengan jarak 20px | p-6 : padding 24px
+       sm:grid-cols-2 : dua kolom di >= 640px | lg:grid-cols-4 : empat kolom di >= 1024px */
+    @apply grid gap-5 p-6 sm:grid-cols-2 lg:grid-cols-4;
+  }
+
+  .result-info-label {
+    /* text-xs : 12px | text-green-200 */
+    @apply text-xs text-green-200;
+  }
+
+  .result-info-value {
+    /* mt-1 : margin atas 4px | font-semibold | text-white | break-words : teks panjang turun baris */
+    @apply mt-1 break-words font-semibold text-white;
+  }
+
+  /* =====================================================================
+     6. STATUS HALAMAN  —  memuat / tidak ditemukan
+     ===================================================================== */
+
+  .result-state {
+    /* flex flex-col items-center justify-center : isi di tengah halaman
+       min-h-[60vh] : tinggi minimal 60% layar | gap-3 : jarak 12px | px-4 : padding kiri-kanan 16px */
+    @apply flex min-h-[60vh] flex-col items-center justify-center gap-3 px-4 text-center;
+  }
+
+  .result-state-text {
+    /* text-sm : 14px | text-green-100 */
+    @apply text-sm text-green-100;
+  }
+
+  .result-error-card {
+    /* w-full max-w-md : lebar maks 448px | rounded-3xl : sudut 24px
+       border border-white/10 bg-white/10 : kaca | p-8 : padding 32px | shadow-2xl */
+    @apply w-full max-w-md rounded-3xl border border-white/10 bg-white/10 p-8 shadow-2xl backdrop-blur-xl;
+  }
+
+  .result-error-icon {
+    /* LINGKARAN ikon: mx-auto mb-4 : di tengah, jarak bawah 16px
+       flex center, 56px, bulat, latar merah 15%, ikon merah muda */
+    @apply mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-red-500/15 text-red-200;
+  }
+
+  .result-error-title {
+    /* text-xl : 20px | font-bold | text-white */
+    @apply mb-2 text-xl font-bold text-white;
+  }
+
+  .result-error-actions {
+    /* mt-6 : jarak atas 24px | flex flex-wrap justify-center gap-3 : tombol di tengah */
+    @apply mt-6 flex flex-wrap justify-center gap-3;
+  }
+}

@@ -1,0 +1,46 @@
+/* =========================================================================
+   card.css  —  kartu kaca bersama (components/ui/GlassCard.tsx)
+
+   Pemakaian di React:
+       <GlassCard icon={Info} title="Judul" description="Keterangan">
+           <div className="glass-card-body"> ...isi... </div>
+       </GlassCard>
+   ========================================================================= */
+
+@layer components {
+
+  .glass-card {
+    /* rounded-3xl : sudut 24px | border border-white/10 : garis tepi putih 10%
+       bg-white/10 : latar putih 10% | shadow-2xl : bayangan besar
+       backdrop-blur-xl : latar belakang dikaburkan (efek kaca) */
+    @apply rounded-3xl border border-white/10 bg-white/10 shadow-2xl backdrop-blur-xl;
+  }
+
+  .glass-card-head {
+    /* flex items-center gap-3 : ikon + judul berdampingan, jarak 12px
+       border-b border-white/10 : garis pemisah di bawah kepala
+       px-6 : padding kiri-kanan 24px | py-5 : atas-bawah 20px */
+    @apply flex items-center gap-3 border-b border-white/10 px-6 py-5;
+  }
+
+  .glass-card-icon {
+    /* KOTAK ikon: 40px, sudut 12px, latar hijau limau 15%, ikon hijau limau
+       shrink-0 : tidak mengecil saat ruang sempit */
+    @apply flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-lime-300/15 text-lime-300;
+  }
+
+  .glass-card-title {
+    /* text-lg : 18px | font-semibold : agak tebal | text-white */
+    @apply text-lg font-semibold text-white;
+  }
+
+  .glass-card-desc {
+    /* text-sm : 14px | text-green-200 : hijau muda */
+    @apply text-sm text-green-200;
+  }
+
+  .glass-card-body {
+    /* p-6 : padding 24px | sm:p-8 : 32px (>= 640px) */
+    @apply p-6 sm:p-8;
+  }
+}

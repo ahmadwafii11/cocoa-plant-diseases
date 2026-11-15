@@ -31,6 +31,11 @@ export const ROUTES = {
     profile: "/profil",
 } as const;
 
+/** URL halaman hasil deteksi, mis. detectionResultPath(12) -> "/hasil-deteksi/12". */
+export function detectionResultPath(id: number): string {
+    return ROUTES.result.replace(":id", String(id));
+}
+
 // Menu navigasi di navbar untuk pengguna yang sudah login
 export const APP_NAV_LINKS: NavItem[] = [
     {label: "Beranda", href: ROUTES.home},

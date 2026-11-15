@@ -18,17 +18,54 @@ export const DETECTION_ACCEPT = ".jpg,.jpeg,image/jpeg";
 
 export interface DiseaseClass {
     name: string;
+    label: string;
     category: "Sehat" | "Penyakit" | "Hama";
+    description: string;
     icon: LucideIcon;
 }
 
 // Empat kelas yang dikenali oleh model (sesuai urutan saat pelatihan model)
 export const DISEASE_CLASSES: DiseaseClass[] = [
-    { name: "Kakao Sehat", category: "Sehat", icon: Leaf },
-    { name: "Busuk Buah", category: "Penyakit", icon: AlertTriangle },
-    { name: "Helopeltis", category: "Hama", icon: Bug },
-    { name: "Penggerek Buah Kakao (PBK)", category: "Hama", icon: Bug },
+    { 
+        name: "Kakao Sehat",
+        label: "Kakao Sehat",
+        category: "Sehat",
+        description: "Hasil klasifikasi menunjukkan karakteristik visual yang menyerupai buah kakao sehat.",
+        icon: Leaf 
+    },
+    { 
+        name: "Busuk Buah", 
+        label: "Busuk Buah",
+        category: "Penyakit", 
+        description: "Hasil menunjukkan karakteristik yang menyerupai gejala busuk buah pada buah kakao.",
+        icon: AlertTriangle 
+    },
+    { 
+        name: "Helopeltis", 
+        label: "Helopeltis",
+        category: "Hama", 
+        description: "Hasil menunjukkan karakteristik yang menyerupai kerusakan akibat serangan Helopeltis.",
+        icon: Bug 
+    },
+    { 
+        name: "Penggerek Buah Kakao (PBK)", 
+        label: "Penggerek Buah Kakao (PBK)",
+        category: "Hama", 
+        description: "Hasil menunjukkan karakteristik yang menyerupai gejala serangan Penggerek Buah Kakao (PBK).",
+        icon: Bug 
+    },
 ];
+
+// Mencari info kelas dari nama kelas hasil model.
+// Undefined apabila kelas tidak dikenal.
+export function findDiseaseClass(className: string): DiseaseClass | undefined {
+    return DISEASE_CLASSES.find((item) => item.name === className);
+}
+
+// Model hanya mempunyai empat kelas (tidak terdapat kelas "bukan kakao")
+// Jadi, foto apapun tetap akan diberikan satu label.
+// Di bawah ambang ini hasil akan diberikan peringatan.
+export const LOW_CONFIDENCE_THRESHOLD = 0.6;
 
 // Tips agar foto mendapatkan hasil deteksi yang baik
 export const PHOTO_TIPS: string[] = [
